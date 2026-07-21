@@ -602,6 +602,20 @@
       if (!isFinite(n)) return "0";
       return n.toFixed(digits).replace(/\.?0+$/, "");
     }
+    function formatDisplayDate(value) {
+      if (!value) return "—";
+
+      const d = new Date(value);
+      if (isNaN(d.getTime())) {
+        return String(value);
+      }
+
+      return d.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "2-digit"
+      });
+    }
     function escapeHtml(text) {
       return String(text || "")
         .replace(/&/g, "&amp;")
