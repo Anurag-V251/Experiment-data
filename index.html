@@ -14,7 +14,6 @@
       --line:#dbe4f0;
       --primary:#4f46e5;
       --primary2:#06b6d4;
-      --accent:#10b981;
       --warn:#f59e0b;
       --danger:#dc2626;
       --chip:#eef2ff;
@@ -215,14 +214,35 @@
     }
     .status{margin-top:10px;color:var(--muted);font-size:.92rem}
     .footer{text-align:center;color:var(--muted);padding:24px 6px 36px;font-size:.92rem}
+
     .modal{
-      position:fixed;inset:0;background:rgba(0,0,0,.35);
+      position:fixed;inset:0;background:rgba(0,0,0,.4);
       display:none;align-items:center;justify-content:center;padding:16px;z-index:1000;
     }
     .modal.open{display:flex}
     .modal-card{
-      width:min(500px,100%);background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);
+      width:min(1100px,100%);
+      max-height:92vh;
+      overflow:auto;
+      background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);
     }
+    .modal-card.small{width:min(500px,100%)}
+    .modal-head{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      margin-bottom:14px;
+    }
+    .icon-btn{
+      border:none;background:#f3f4f6;color:#111827;width:40px;height:40px;
+      border-radius:12px;cursor:pointer;font-weight:700;
+    }
+    .view-section{display:grid;gap:12px}
+    .view-block{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdff;
+    }
+
     @media (max-width:1250px){
       .stats{grid-template-columns:repeat(2,1fr)}
       .main{grid-template-columns:1fr}
@@ -243,12 +263,12 @@
         <div>
           <h1>Chemistry Experiment Yield Tool</h1>
           <p class="subtitle">
-            Advanced experiment tracker with online record storage, multi-filter search, saved search presets, reusable reagent library, and editable library records.
+            Optimized version with online Google Sheets storage, advanced search, saved filters, editable reagent library, record view modal, and export of current filtered search for Excel.
           </p>
         </div>
         <div class="toolbar">
           <button class="btn btn-primary" id="newExperimentBtn">New Experiment</button>
-          <button class="btn btn-glass" id="refreshBtn">Refresh</button>
+          <button class="btn btn-glass" id="refreshBtn">Refresh from Google Sheets</button>
         </div>
       </div>
     </section>
@@ -285,9 +305,8 @@
       <aside class="card panel">
         <h3>Quick Controls</h3>
         <div class="stack">
-          <button class="btn btn-dark" id="addReagentBtn">+ Add Reagent</button>
-          <button class="btn btn-soft" id="recalculateBtn">Recalculate</button>
-          <button class="btn btn-soft" id="clearFormBtn">Clear Form</button>
+          <button class="btn btn-dark" id="openAddExperimentBtn">+ Add New Experiment</button>
+          <button class="btn btn-soft" id="clearSearchBtn">Clear Search</button>
         </div>
 
         <div class="divider"></div>
@@ -327,8 +346,8 @@
             <input id="searchLimiter" type="text" placeholder="Reagent name" />
           </div>
           <div class="toolbar">
-            <button class="btn btn-soft" id="clearSearchBtn">Clear Search</button>
             <button class="btn btn-success" id="openSaveSearchBtn">Save Search</button>
+            <button class="btn btn-dark" id="exportSearchBtn">Export Current Search</button>
           </div>
         </div>
 
@@ -364,106 +383,14 @@
         <div class="divider"></div>
 
         <div class="notice">
-          Verify stoichiometry, coefficients, purity assumptions, and units before relying on calculated values.
+          Experiments and reagent library are saved in Google Sheets. Closing the page does not delete them.
         </div>
         <div class="status" id="statusBox">Ready.</div>
       </aside>
 
       <section class="stack">
         <div class="card panel">
-          <h2 id="formTitle">New Experiment</h2>
-
-          <div class="grid-3">
-            <div>
-              <label for="experimentId">Experiment ID</label>
-              <input id="experimentId" type="text" placeholder="e.g. EXP-024" />
-            </div>
-            <div>
-              <label for="experimentName">Experiment Name</label>
-              <input id="experimentName" type="text" placeholder="e.g. Esterification Trial" />
-            </div>
-            <div>
-              <label for="experimentDate">Date</label>
-              <input id="experimentDate" type="date" />
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top:14px">
-            <div>
-              <label for="productName">Target Product</label>
-              <input id="productName" type="text" placeholder="e.g. Aspirin" />
-            </div>
-            <div>
-              <label for="productMolarMass">Product Molar Mass (g/mol)</label>
-              <input id="productMolarMass" type="number" step="any" min="0" placeholder="e.g. 180.16" />
-            </div>
-          </div>
-
-          <div style="margin-top:18px">
-            <label>Reagents</label>
-            <table>
-              <thead>
-                <tr>
-                  <th style="min-width:160px">Saved Reagent</th>
-                  <th style="min-width:150px">Name</th>
-                  <th>Coefficient</th>
-                  <th>Molar Mass (g/mol)</th>
-                  <th>Mass Used (g)</th>
-                  <th>Moles</th>
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="reagentTableBody"></tbody>
-            </table>
-          </div>
-
-          <div class="result-grid">
-            <div class="result">
-              <strong>Limiting Reagent</strong>
-              <span id="limitingReagentResult">—</span>
-            </div>
-            <div class="result">
-              <strong>Theoretical Product Moles</strong>
-              <span id="theoreticalMolesResult">0</span>
-            </div>
-            <div class="result">
-              <strong>Theoretical Yield (g)</strong>
-              <span id="theoreticalYieldResult">0</span>
-            </div>
-            <div class="result">
-              <strong>Percent Yield</strong>
-              <span id="percentYieldResult">0%</span>
-            </div>
-          </div>
-
-          <div class="grid-2" style="margin-top:16px">
-            <div>
-              <label for="actualYield">Actual Yield (g)</label>
-              <input id="actualYield" type="number" step="any" min="0" placeholder="e.g. 4.85" />
-            </div>
-            <div>
-              <label for="manualLimiter">Manual Limiting Reagent Override</label>
-              <select id="manualLimiter">
-                <option value="">Auto-detect</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="margin-top:14px">
-            <label for="notes">Experiment Notes</label>
-            <textarea id="notes" placeholder="Procedure notes, observations, purity assumptions, temperature, catalyst, issues, etc."></textarea>
-          </div>
-
-          <div class="toolbar" style="margin-top:16px">
-            <button class="btn btn-dark" id="saveExperimentBtn">Save Experiment</button>
-            <button class="btn btn-success" id="duplicateBtn">Duplicate Current</button>
-            <button class="btn btn-warn" id="recalcBottomBtn">Recalculate</button>
-          </div>
-        </div>
-
-        <div class="card panel">
-          <div class="toolbar">
+          <div class="toolbar" style="justify-content:space-between">
             <h2 style="margin:0">Saved Experiments</h2>
             <div class="chips">
               <span class="chip" id="recordCountChip">0 records</span>
@@ -477,13 +404,127 @@
     </section>
 
     <div class="footer">
-      Chemistry Experiment Yield Tool — GitHub Pages + Google Sheets + Apps Script
+      Chemistry Experiment Yield Tool — optimized GitHub Pages + Google Sheets + Apps Script
+    </div>
+  </div>
+
+  <div class="modal" id="experimentFormModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="formTitle">New Experiment</h2>
+        <button class="icon-btn" id="closeFormModalBtn">✕</button>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label for="experimentId">Experiment ID</label>
+          <input id="experimentId" type="text" placeholder="e.g. EXP-024" />
+        </div>
+        <div>
+          <label for="experimentName">Experiment Name</label>
+          <input id="experimentName" type="text" placeholder="e.g. Esterification Trial" />
+        </div>
+        <div>
+          <label for="experimentDate">Date</label>
+          <input id="experimentDate" type="date" />
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px">
+        <div>
+          <label for="productName">Target Product</label>
+          <input id="productName" type="text" placeholder="e.g. Aspirin" />
+        </div>
+        <div>
+          <label for="productMolarMass">Product Molar Mass (g/mol)</label>
+          <input id="productMolarMass" type="number" step="any" min="0" placeholder="e.g. 180.16" />
+        </div>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="toolbar" style="justify-content:space-between">
+          <label style="margin:0">Reagents</label>
+          <button class="btn btn-dark" id="addReagentBtn">+ Add Reagent</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:160px">Saved Reagent</th>
+              <th style="min-width:150px">Name</th>
+              <th>Coefficient</th>
+              <th>Molar Mass (g/mol)</th>
+              <th>Mass Used (g)</th>
+              <th>Moles</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reagentTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="result-grid">
+        <div class="result">
+          <strong>Limiting Reagent</strong>
+          <span id="limitingReagentResult">—</span>
+        </div>
+        <div class="result">
+          <strong>Theoretical Product Moles</strong>
+          <span id="theoreticalMolesResult">0</span>
+        </div>
+        <div class="result">
+          <strong>Theoretical Yield (g)</strong>
+          <span id="theoreticalYieldResult">0</span>
+        </div>
+        <div class="result">
+          <strong>Percent Yield</strong>
+          <span id="percentYieldResult">0%</span>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px">
+        <div>
+          <label for="actualYield">Actual Yield (g)</label>
+          <input id="actualYield" type="number" step="any" min="0" placeholder="e.g. 4.85" />
+        </div>
+        <div>
+          <label for="manualLimiter">Manual Limiting Reagent Override</label>
+          <select id="manualLimiter">
+            <option value="">Auto-detect</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <label for="notes">Experiment Notes</label>
+        <textarea id="notes" placeholder="Procedure notes, observations, purity assumptions, temperature, catalyst, issues, etc."></textarea>
+      </div>
+
+      <div class="toolbar" style="margin-top:16px">
+        <button class="btn btn-dark" id="saveExperimentBtn">Save Experiment</button>
+        <button class="btn btn-success" id="duplicateBtn">Duplicate Current</button>
+        <button class="btn btn-warn" id="recalcBottomBtn">Recalculate</button>
+        <button class="btn btn-soft" id="cancelExperimentBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="viewExperimentModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="viewTitle">Experiment View</h2>
+        <button class="icon-btn" id="closeViewModalBtn">✕</button>
+      </div>
+      <div id="viewContent" class="view-section"></div>
     </div>
   </div>
 
   <div class="modal" id="saveSearchModal">
-    <div class="modal-card">
-      <h3>Save Search</h3>
+    <div class="modal-card small">
+      <div class="modal-head">
+        <h3 style="margin:0">Save Search</h3>
+        <button class="icon-btn" id="closeSaveSearchBtn">✕</button>
+      </div>
       <div class="stack">
         <div>
           <label for="savedSearchName">Search Name</label>
@@ -498,8 +539,11 @@
   </div>
 
   <div class="modal" id="editLibraryModal">
-    <div class="modal-card">
-      <h3>Edit Reagent Library Item</h3>
+    <div class="modal-card small">
+      <div class="modal-head">
+        <h3 style="margin:0">Edit Reagent Library Item</h3>
+        <button class="icon-btn" id="closeEditLibraryBtn">✕</button>
+      </div>
       <input type="hidden" id="editLibraryId" />
       <div class="stack">
         <div>
@@ -521,6 +565,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbyOCvy94-DiYSvnPO7axstX3JcEM35N2cGxnisYiM3ZB7B8TOwSw7SQXKtJk9gpEyx3cA/exec";
     const SAVED_SEARCHES_KEY = "chemistry_saved_searches_v1";
+    const CACHE_KEY = "chemistry_online_cache_v3";
 
     const $ = (id) => document.getElementById(id);
 
@@ -559,8 +604,40 @@
     }
     function escapeHtml(text) {
       return String(text || "")
-        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function debounce(fn, delay = 250) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    }
+    function openModal(id){ $(id).classList.add("open"); }
+    function closeModal(id){ $(id).classList.remove("open"); }
+
+    function downloadFile(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function saveCache() {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ experiments, reagentLibrary, cachedAt: new Date().toISOString() }));
+      } catch {}
+    }
+    function loadCache() {
+      try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || null; }
+      catch { return null; }
     }
 
     function getSavedSearches() {
@@ -577,7 +654,6 @@
       if (!response.ok) throw new Error("GET failed: " + response.status);
       return response.json();
     }
-
     async function apiPost(payload) {
       const formData = new URLSearchParams();
       formData.append("payload", JSON.stringify(payload));
@@ -622,6 +698,7 @@
 
     function renderReagentTable() {
       if (!reagentRows.length) reagentRows = [getDefaultReagent()];
+
       reagentTableBody.innerHTML = reagentRows.map((row, index) => {
         const moles = calculateMoles(row.mass, row.molarMass);
         return `
@@ -775,56 +852,15 @@
       recalculateAll(true);
     }
 
-    async function loadAllData() {
-      try {
-        setStatus("Loading data...");
-        const [expRes, libRes] = await Promise.all([apiGet("listExperiments"), apiGet("listLibrary")]);
-        if (!expRes.success) throw new Error(expRes.error || "Could not load experiments");
-        if (!libRes.success) throw new Error(libRes.error || "Could not load library");
-
-        experiments = Array.isArray(expRes.experiments) ? expRes.experiments : [];
-        reagentLibrary = Array.isArray(libRes.reagentLibrary) ? libRes.reagentLibrary : [];
-
-        updateLibraryUI();
-        renderSavedExperiments();
-        renderReagentTable();
-        recalculateAll(false);
-        setStatus("Data loaded.");
-      } catch (err) {
-        console.error(err);
-        setStatus("Could not load data. Check your Apps Script URL and deployment settings.");
-        $("entryList").innerHTML = `<div class="empty" style="grid-column:1/-1">Could not load experiments.</div>`;
-        libraryList.innerHTML = `<div class="empty">Could not load library.</div>`;
-      }
+    function openNewExperimentForm() {
+      resetForm();
+      openModal("experimentFormModal");
     }
 
-    async function saveExperiment() {
-      const data = getCurrentExperimentData();
-      if (!data.experimentName) return alert("Please enter an experiment name.");
-      if (!data.experimentDate) return alert("Please enter a date.");
-      if (!data.productName) return alert("Please enter a target product.");
-
-      try {
-        setStatus("Saving experiment...");
-        const action = data.id ? "updateExperiment" : "createExperiment";
-        const result = await apiPost({ action, experiment: data });
-        if (!result.success) throw new Error(result.error || "Save failed");
-
-        currentEditId = result.experiment.id;
-        formTitle.textContent = "Edit Experiment";
-        await loadAllData();
-        setStatus("Experiment saved.");
-        alert("Experiment saved.");
-      } catch (err) {
-        console.error(err);
-        setStatus("Could not save experiment.");
-        alert("Could not save experiment.");
-      }
-    }
-
-    function loadExperiment(id) {
+    function openEditExperimentForm(id) {
       const record = experiments.find(r => String(r.id) === String(id));
       if (!record) return;
+
       currentEditId = record.id;
       formTitle.textContent = "Edit Experiment";
       experimentId.value = record.experimentCode || "";
@@ -841,7 +877,153 @@
       refreshManualLimiterOptions();
       manualLimiter.value = record.manualLimiter || "";
       recalculateAll(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      openModal("experimentFormModal");
+    }
+
+    function renderViewExperiment(record) {
+      const reagentsHtml = (record.reagents || []).length
+        ? `
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Coefficient</th>
+                <th>Molar Mass</th>
+                <th>Mass</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(record.reagents || []).map(r => `
+                <tr>
+                  <td>${escapeHtml(r.name || "")}</td>
+                  <td>${escapeHtml(r.coefficient || "")}</td>
+                  <td>${escapeHtml(r.molarMass || "")}</td>
+                  <td>${escapeHtml(r.mass || "")}</td>
+                  <td>${escapeHtml(r.role || "")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `
+        : `<div class="muted">No reagents recorded.</div>`;
+
+      $("viewTitle").textContent = record.experimentName || "Experiment View";
+      $("viewContent").innerHTML = `
+        <div class="view-block"><strong>Experiment ID:</strong> ${escapeHtml(record.experimentCode || "—")}</div>
+        <div class="view-block"><strong>Date:</strong> ${escapeHtml(record.experimentDate || "—")}</div>
+        <div class="view-block"><strong>Target Product:</strong> ${escapeHtml(record.productName || "—")}</div>
+        <div class="view-block"><strong>Product Molar Mass:</strong> ${escapeHtml(record.productMolarMass || "—")} g/mol</div>
+        <div class="view-block"><strong>Actual Yield:</strong> ${escapeHtml(record.actualYield || "—")} g</div>
+        <div class="view-block"><strong>Limiting Reagent:</strong> ${escapeHtml(record.limitingReagentName || "—")}</div>
+        <div class="view-block"><strong>Theoretical Moles:</strong> ${formatNum(record.theoreticalMoles || 0, 6)}</div>
+        <div class="view-block"><strong>Theoretical Yield:</strong> ${formatNum(record.theoreticalYield || 0, 4)} g</div>
+        <div class="view-block"><strong>Percent Yield:</strong> ${formatNum(record.percentYield || 0, 2)}%</div>
+        <div class="view-block"><strong>Notes:</strong><br>${escapeHtml(record.notes || "—")}</div>
+        <div class="view-block">
+          <strong>Reagents</strong>
+          <div style="margin-top:10px">${reagentsHtml}</div>
+        </div>
+      `;
+    }
+
+    function viewExperiment(id) {
+      const record = experiments.find(r => String(r.id) === String(id));
+      if (!record) return;
+      renderViewExperiment(record);
+      openModal("viewExperimentModal");
+    }
+
+    function normalizeExperimentForUI(exp) {
+      return { ...exp, reagents: Array.isArray(exp.reagents) ? exp.reagents : [] };
+    }
+
+    function updateExperimentInMemory(saved) {
+      const normalized = normalizeExperimentForUI(saved);
+      const idx = experiments.findIndex(e => String(e.id) === String(normalized.id));
+      if (idx >= 0) experiments[idx] = normalized;
+      else experiments.unshift(normalized);
+      experiments.sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+      saveCache();
+    }
+
+    function removeExperimentFromMemory(id) {
+      experiments = experiments.filter(e => String(e.id) !== String(id));
+      saveCache();
+    }
+
+    function upsertLibraryInMemory(item) {
+      const idx = reagentLibrary.findIndex(x => String(x.id) === String(item.id));
+      if (idx >= 0) reagentLibrary[idx] = item;
+      else reagentLibrary.push(item);
+      reagentLibrary.sort((a,b) => String(a.name).localeCompare(String(b.name)));
+      saveCache();
+    }
+
+    function removeLibraryFromMemory(id) {
+      reagentLibrary = reagentLibrary.filter(x => String(x.id) !== String(id));
+      saveCache();
+    }
+
+    async function loadAllData(showStatus = true) {
+      try {
+        if (showStatus) setStatus("Loading data from Google Sheets...");
+        const [expRes, libRes] = await Promise.all([apiGet("listExperiments"), apiGet("listLibrary")]);
+        if (!expRes.success) throw new Error(expRes.error || "Could not load experiments");
+        if (!libRes.success) throw new Error(libRes.error || "Could not load library");
+
+        experiments = (Array.isArray(expRes.experiments) ? expRes.experiments : []).map(normalizeExperimentForUI);
+        reagentLibrary = Array.isArray(libRes.reagentLibrary) ? libRes.reagentLibrary : [];
+
+        saveCache();
+        updateLibraryUI();
+        renderSavedExperiments();
+        renderReagentTable();
+        recalculateAll(false);
+        if (showStatus) setStatus("Data loaded.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not load fresh data from Google Sheets.");
+      }
+    }
+
+    function loadCachedData() {
+      const cache = loadCache();
+      if (!cache) return false;
+      experiments = Array.isArray(cache.experiments) ? cache.experiments.map(normalizeExperimentForUI) : [];
+      reagentLibrary = Array.isArray(cache.reagentLibrary) ? cache.reagentLibrary : [];
+      updateLibraryUI();
+      renderSavedExperiments();
+      renderReagentTable();
+      recalculateAll(false);
+      setStatus("Loaded cached data, syncing...");
+      return true;
+    }
+
+    async function saveExperiment() {
+      const data = getCurrentExperimentData();
+      if (!data.experimentName) return alert("Please enter an experiment name.");
+      if (!data.experimentDate) return alert("Please enter a date.");
+      if (!data.productName) return alert("Please enter a target product.");
+
+      try {
+        setStatus("Saving experiment...");
+        const action = data.id ? "updateExperiment" : "createExperiment";
+        const result = await apiPost({ action, experiment: data });
+        if (!result.success) throw new Error(result.error || "Save failed");
+
+        updateExperimentInMemory(result.experiment);
+        currentEditId = result.experiment.id;
+        formTitle.textContent = "Edit Experiment";
+        renderSavedExperiments();
+        closeModal("experimentFormModal");
+        setStatus("Experiment saved.");
+        alert("Experiment saved.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not save experiment.");
+        alert("Could not save experiment.");
+      }
     }
 
     function duplicateCurrent() {
@@ -857,8 +1039,11 @@
         setStatus("Deleting experiment...");
         const result = await apiPost({ action: "deleteExperiment", id });
         if (!result.success) throw new Error(result.error || "Delete failed");
+
+        removeExperimentFromMemory(id);
         if (currentEditId === id) resetForm();
-        await loadAllData();
+        renderSavedExperiments();
+        closeModal("viewExperimentModal");
         setStatus("Experiment deleted.");
       } catch (err) {
         console.error(err);
@@ -883,14 +1068,14 @@
     function applyFilters(records) {
       const f = getSearchFilters();
       return records.filter(r => {
+        const reagentNames = Array.isArray(r.reagents) ? r.reagents.map(x => x.name) : [];
         const textHaystack = [
           r.experimentCode, r.experimentName, r.experimentDate,
-          r.productName, r.notes, r.limitingReagentName,
-          ...(Array.isArray(r.reagents) ? r.reagents.map(x => x.name) : [])
+          r.productName, r.notes, r.limitingReagentName, ...reagentNames
         ].join(" ").toLowerCase();
 
-        const reagentHaystack = (Array.isArray(r.reagents) ? r.reagents.map(x => x.name).join(" ") : "").toLowerCase();
         const productVal = String(r.productName || "").toLowerCase();
+        const reagentHaystack = reagentNames.join(" ").toLowerCase();
         const limiterVal = String(r.limitingReagentName || "").toLowerCase();
         const dateVal = String(r.experimentDate || "");
         const yieldVal = Number(r.percentYield);
@@ -903,24 +1088,78 @@
         if (f.dateTo && dateVal > f.dateTo) return false;
         if (f.yieldMin !== "" && (!isFinite(yieldVal) || yieldVal < Number(f.yieldMin))) return false;
         if (f.yieldMax !== "" && (!isFinite(yieldVal) || yieldVal > Number(f.yieldMax))) return false;
-
         return true;
       });
     }
 
-    function renderSavedExperiments() {
+    function exportCurrentSearchCSV() {
       const filtered = applyFilters(experiments)
-        .slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+        .slice()
+        .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
 
+      if (!filtered.length) {
+        alert("There are no filtered experiment records to export.");
+        return;
+      }
+
+      const headers = [
+        "Experiment ID",
+        "Experiment Name",
+        "Date",
+        "Product",
+        "Product Molar Mass (g/mol)",
+        "Actual Yield (g)",
+        "Limiting Reagent",
+        "Theoretical Moles",
+        "Theoretical Yield (g)",
+        "Percent Yield",
+        "Notes",
+        "Reagents"
+      ];
+
+      const rows = filtered.map(r => {
+        const reagentSummary = Array.isArray(r.reagents)
+          ? r.reagents.map(x =>
+              `${x.name || ""} [coef=${x.coefficient || ""}, MM=${x.molarMass || ""}, mass=${x.mass || ""}, role=${x.role || ""}]`
+            ).join(" | ")
+          : "";
+
+        return [
+          r.experimentCode || "",
+          r.experimentName || "",
+          r.experimentDate || "",
+          r.productName || "",
+          r.productMolarMass || "",
+          r.actualYield || "",
+          r.limitingReagentName || "",
+          r.theoreticalMoles || "",
+          r.theoreticalYield || "",
+          r.percentYield || "",
+          r.notes || "",
+          reagentSummary
+        ];
+      });
+
+      const csv = [
+        headers.join(","),
+        ...rows.map(row =>
+          row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(",")
+        )
+      ].join("\n");
+
+      const dateTag = new Date().toISOString().slice(0, 10);
+      downloadFile(`chemistry-search-export-${dateTag}.csv`, csv, "text/csv;charset=utf-8;");
+    }
+
+    function renderSavedExperiments() {
+      const filtered = applyFilters(experiments).slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
       $("recordCountChip").textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"}`;
       $("statExperiments").textContent = experiments.length;
       $("statFiltered").textContent = filtered.length;
 
       const yields = experiments.map(r => Number(r.percentYield)).filter(n => isFinite(n) && n > 0);
       $("statAvgYield").textContent = yields.length ? formatNum(yields.reduce((a,b) => a+b, 0) / yields.length, 1) + "%" : "0%";
-      $("statLatest").textContent = experiments.length
-        ? (experiments.slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))[0].experimentName || "Untitled")
-        : "—";
+      $("statLatest").textContent = experiments.length ? (experiments[0].experimentName || "Untitled") : "—";
 
       const entryList = $("entryList");
       if (!filtered.length) {
@@ -943,7 +1182,8 @@
           <div class="snippet"><strong>Actual yield:</strong> ${escapeHtml(r.actualYield || "0")} g</div>
           ${r.notes ? `<div class="snippet"><strong>Notes:</strong> ${escapeHtml(String(r.notes).slice(0, 140))}${String(r.notes).length > 140 ? "..." : ""}</div>` : ""}
           <div class="entry-actions">
-            <button class="btn btn-soft" onclick="window.editExperiment('${r.id}')">Edit</button>
+            <button class="btn btn-soft" onclick="window.viewExperiment('${r.id}')">View</button>
+            <button class="btn btn-warn" onclick="window.editExperiment('${r.id}')">Edit</button>
             <button class="btn btn-danger" onclick="window.removeExperiment('${r.id}')">Delete</button>
           </div>
         </article>
@@ -963,7 +1203,10 @@
           item: { id: existingId, name: cleanName, molarMass: mm }
         });
         if (!result.success) throw new Error(result.error || "Library save failed");
-        await loadAllData();
+
+        upsertLibraryInMemory(result.item);
+        updateLibraryUI();
+        renderReagentTable();
         setStatus("Reagent library updated.");
         return true;
       } catch (err) {
@@ -979,6 +1222,9 @@
       if (!row) return;
       const ok = await saveLibraryItem(row.name, row.molarMass, row.libraryId || "");
       if (!ok) return;
+      const match = reagentLibrary.find(item => item.name.toLowerCase() === String(row.name).trim().toLowerCase());
+      if (match) row.libraryId = match.id;
+      renderReagentTable();
       alert("Reagent saved to library.");
     }
 
@@ -996,7 +1242,12 @@
         setStatus("Deleting reagent...");
         const result = await apiPost({ action: "deleteLibraryItem", id });
         if (!result.success) throw new Error(result.error || "Delete failed");
-        await loadAllData();
+
+        removeLibraryFromMemory(id);
+        reagentRows = reagentRows.map(row => row.libraryId === id ? { ...row, libraryId: "" } : row);
+        updateLibraryUI();
+        renderReagentTable();
+        recalculateAll(false);
         setStatus("Reagent deleted.");
       } catch (err) {
         console.error(err);
@@ -1011,7 +1262,7 @@
       $("editLibraryId").value = item.id;
       $("editLibraryName").value = item.name || "";
       $("editLibraryMolarMass").value = item.molarMass || "";
-      $("editLibraryModal").classList.add("open");
+      openModal("editLibraryModal");
     }
 
     async function confirmEditLibrary() {
@@ -1020,17 +1271,14 @@
       const molarMass = $("editLibraryMolarMass").value;
       const ok = await saveLibraryItem(name, molarMass, id);
       if (!ok) return;
-      closeEditLibraryModal();
+      closeModal("editLibraryModal");
       alert("Reagent updated.");
-    }
-
-    function closeEditLibraryModal() {
-      $("editLibraryModal").classList.remove("open");
     }
 
     function useLibraryItem(id) {
       const item = reagentLibrary.find(x => x.id === id);
       if (!item) return;
+      openModal("experimentFormModal");
       reagentRows.push({
         id: uid(),
         libraryId: item.id,
@@ -1076,15 +1324,6 @@
       renderSavedExperiments();
     }
 
-    function openSaveSearchModal() {
-      $("savedSearchName").value = "";
-      $("saveSearchModal").classList.add("open");
-    }
-
-    function closeSaveSearchModal() {
-      $("saveSearchModal").classList.remove("open");
-    }
-
     function confirmSaveSearch() {
       const name = $("savedSearchName").value.trim();
       if (!name) return alert("Please enter a search name.");
@@ -1096,7 +1335,7 @@
         savedAt: new Date().toISOString()
       });
       saveSavedSearches(searches);
-      closeSaveSearchModal();
+      closeModal("saveSearchModal");
     }
 
     function renderSavedSearches() {
@@ -1141,40 +1380,58 @@
       saveSavedSearches(searches);
     }
 
-    $("newExperimentBtn").addEventListener("click", resetForm);
-    $("refreshBtn").addEventListener("click", loadAllData);
+    const debouncedRenderSavedExperiments = debounce(renderSavedExperiments, 250);
+
+    $("newExperimentBtn").addEventListener("click", openNewExperimentForm);
+    $("openAddExperimentBtn").addEventListener("click", openNewExperimentForm);
+    $("refreshBtn").addEventListener("click", () => loadAllData(true));
+
     $("addReagentBtn").addEventListener("click", () => {
       reagentRows.push(getDefaultReagent());
       renderReagentTable();
       refreshManualLimiterOptions();
       recalculateAll(false);
     });
-    $("recalculateBtn").addEventListener("click", () => recalculateAll(false));
-    $("recalcBottomBtn").addEventListener("click", () => recalculateAll(false));
-    $("clearFormBtn").addEventListener("click", resetForm);
+
     $("saveExperimentBtn").addEventListener("click", saveExperiment);
     $("duplicateBtn").addEventListener("click", duplicateCurrent);
+    $("recalcBottomBtn").addEventListener("click", () => recalculateAll(false));
+    $("cancelExperimentBtn").addEventListener("click", () => closeModal("experimentFormModal"));
+    $("closeFormModalBtn").addEventListener("click", () => closeModal("experimentFormModal"));
+    $("closeViewModalBtn").addEventListener("click", () => closeModal("viewExperimentModal"));
+
     $("saveLibraryBtn").addEventListener("click", saveSidebarLibraryEntry);
+    $("exportSearchBtn").addEventListener("click", exportCurrentSearchCSV);
 
     ["searchText","searchProduct","searchReagent","searchDateFrom","searchDateTo","searchYieldMin","searchYieldMax","searchLimiter"]
       .forEach(id => {
-        $(id).addEventListener("input", renderSavedExperiments);
+        $(id).addEventListener("input", debouncedRenderSavedExperiments);
         $(id).addEventListener("change", renderSavedExperiments);
       });
 
     $("clearSearchBtn").addEventListener("click", clearSearch);
-    $("openSaveSearchBtn").addEventListener("click", openSaveSearchModal);
+    $("openSaveSearchBtn").addEventListener("click", () => openModal("saveSearchModal"));
     $("confirmSaveSearchBtn").addEventListener("click", confirmSaveSearch);
-    $("cancelSaveSearchBtn").addEventListener("click", closeSaveSearchModal);
+    $("cancelSaveSearchBtn").addEventListener("click", () => closeModal("saveSearchModal"));
+    $("closeSaveSearchBtn").addEventListener("click", () => closeModal("saveSearchModal"));
+
     $("confirmEditLibraryBtn").addEventListener("click", confirmEditLibrary);
-    $("cancelEditLibraryBtn").addEventListener("click", closeEditLibraryModal);
+    $("cancelEditLibraryBtn").addEventListener("click", () => closeModal("editLibraryModal"));
+    $("closeEditLibraryBtn").addEventListener("click", () => closeModal("editLibraryModal"));
 
     [productMolarMass, actualYield, manualLimiter].forEach(el => {
       el.addEventListener("input", () => recalculateAll(false));
       el.addEventListener("change", () => recalculateAll(false));
     });
 
-    window.editExperiment = loadExperiment;
+    document.querySelectorAll(".modal").forEach(modal => {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.remove("open");
+      });
+    });
+
+    window.editExperiment = openEditExperimentForm;
+    window.viewExperiment = viewExperiment;
     window.removeExperiment = deleteExperiment;
     window.useLibraryReagent = useLibraryItem;
     window.deleteLibraryReagent = deleteLibraryItem;
@@ -1182,9 +1439,14 @@
     window.applySavedSearch = applySavedSearch;
     window.deleteSavedSearch = deleteSavedSearch;
 
-    resetForm();
     renderSavedSearches();
-    loadAllData();
+    resetForm();
+
+    if (!loadCachedData()) {
+      renderSavedExperiments();
+      updateLibraryUI();
+    }
+    loadAllData(false);
   </script>
 </body>
 </html>
