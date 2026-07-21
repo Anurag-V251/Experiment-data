@@ -911,7 +911,7 @@
       $("viewTitle").textContent = record.experimentName || "Experiment View";
       $("viewContent").innerHTML = `
         <div class="view-block"><strong>Experiment ID:</strong> ${escapeHtml(record.experimentCode || "—")}</div>
-        <div class="view-block"><strong>Date:</strong> ${escapeHtml(record.experimentDate || "—")}</div>
+        <div class="view-block"><strong>Date:</strong> ${escapeHtml(formatDisplayDate(record.experimentDate))}</div>
         <div class="view-block"><strong>Target Product:</strong> ${escapeHtml(record.productName || "—")}</div>
         <div class="view-block"><strong>Product Molar Mass:</strong> ${escapeHtml(record.productMolarMass || "—")} g/mol</div>
         <div class="view-block"><strong>Actual Yield:</strong> ${escapeHtml(record.actualYield || "—")} g</div>
@@ -1171,7 +1171,7 @@
         <article class="entry">
           <div>
             <div class="entry-title">${escapeHtml(r.experimentName || "Untitled Experiment")}</div>
-            <div class="muted small">${escapeHtml(r.experimentDate || "No date")} ${r.experimentCode ? "· " + escapeHtml(r.experimentCode) : ""}</div>
+            <div class="muted small">${escapeHtml(formatDisplayDate(r.experimentDate))} ${r.experimentCode ? "· " + escapeHtml(r.experimentCode) : ""}</div>
           </div>
           <div class="chips">
             <span class="chip">${escapeHtml(r.productName || "No product")}</span>
