@@ -22,7 +22,6 @@
       --shadow:0 14px 40px rgba(20,30,50,.10);
       --radius:20px;
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
@@ -34,8 +33,7 @@
         linear-gradient(180deg, var(--bg-soft), var(--bg));
       min-height:100vh;
     }
-
-    .wrap{max-width:1400px;margin:0 auto;padding:18px}
+    .wrap{max-width:1480px;margin:0 auto;padding:18px}
     .hero{
       background:linear-gradient(135deg,var(--primary),var(--primary2));
       color:#fff;
@@ -51,8 +49,7 @@
       flex-wrap:wrap;
     }
     h1{margin:0 0 8px;font-size:2rem;letter-spacing:-.03em}
-    .subtitle{margin:0;max-width:820px;opacity:.96}
-
+    .subtitle{margin:0;max-width:900px;opacity:.96}
     .btn{
       border:none;
       border-radius:14px;
@@ -90,7 +87,7 @@
 
     .main{
       display:grid;
-      grid-template-columns:330px 1fr;
+      grid-template-columns:370px 1fr;
       gap:18px;
       align-items:start;
     }
@@ -99,15 +96,11 @@
     .stack{display:grid;gap:10px}
     .muted{color:var(--muted)}
     .small{font-size:.92rem}
-
-    label{
-      display:block;
-      font-size:.93rem;
-      font-weight:700;
-      margin:0 0 7px;
-    }
-
-    input, select, textarea{
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    label{display:block;font-size:.93rem;font-weight:700;margin:0 0 7px}
+    input,select,textarea{
       width:100%;
       border:1px solid var(--line);
       border-radius:14px;
@@ -116,18 +109,7 @@
       background:#fff;
       color:var(--text);
     }
-
     textarea{min-height:100px;resize:vertical}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
     .chips{display:flex;gap:8px;flex-wrap:wrap}
     .chip{
       background:var(--chip);
@@ -153,23 +135,10 @@
       vertical-align:top;
       font-size:.92rem;
     }
-    th{
-      background:#f8fbff;
-      font-weight:800;
-      color:#334155;
-    }
+    th{background:#f8fbff;font-weight:800;color:#334155}
     tr:last-child td{border-bottom:none}
-    .cell-input{
-      width:100%;
-      min-width:90px;
-      padding:9px 10px;
-      border-radius:10px;
-    }
-    .row-actions{
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-    }
+    .cell-input{width:100%;min-width:90px;padding:9px 10px;border-radius:10px}
+    .row-actions{display:flex;gap:6px;flex-wrap:wrap}
 
     .result-grid{
       display:grid;
@@ -183,20 +152,12 @@
       background:#fbfdff;
       border:1px solid var(--line);
     }
-    .result strong{
-      display:block;
-      font-size:.88rem;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
-    .result span{
-      font-size:1.2rem;
-      font-weight:800;
-    }
+    .result strong{display:block;font-size:.88rem;color:var(--muted);margin-bottom:8px}
+    .result span{font-size:1.2rem;font-weight:800}
 
     .entries{
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
       gap:14px;
     }
     .entry{
@@ -209,10 +170,7 @@
       flex-direction:column;
       gap:12px;
     }
-    .entry-title{
-      font-weight:800;
-      font-size:1.02rem;
-    }
+    .entry-title{font-weight:800;font-size:1.02rem}
     .snippet{
       background:#fafcff;
       border:1px solid #edf2f7;
@@ -220,20 +178,15 @@
       padding:10px;
       font-size:.92rem;
     }
-    .entry-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:auto;
-    }
+    .entry-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
 
-    .library-list{
+    .library-list,.saved-search-list{
       display:grid;
       gap:8px;
       max-height:320px;
       overflow:auto;
     }
-    .library-item{
+    .library-item,.saved-search-item{
       display:flex;
       justify-content:space-between;
       gap:8px;
@@ -243,17 +196,15 @@
       border-radius:12px;
       background:#fbfdff;
     }
-
     .divider{height:1px;background:var(--line);margin:14px 0}
     .empty{
       text-align:center;
-      padding:38px 18px;
+      padding:26px 18px;
       border:1px dashed var(--line);
       border-radius:18px;
       color:var(--muted);
       background:#fafcff;
     }
-
     .notice{
       background:#eff6ff;
       color:#1e3a8a;
@@ -262,21 +213,17 @@
       padding:13px 14px;
       font-size:.94rem;
     }
-
-    .status{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:.92rem;
+    .status{margin-top:10px;color:var(--muted);font-size:.92rem}
+    .footer{text-align:center;color:var(--muted);padding:24px 6px 36px;font-size:.92rem}
+    .modal{
+      position:fixed;inset:0;background:rgba(0,0,0,.35);
+      display:none;align-items:center;justify-content:center;padding:16px;z-index:1000;
     }
-
-    .footer{
-      text-align:center;
-      color:var(--muted);
-      padding:24px 6px 36px;
-      font-size:.92rem;
+    .modal.open{display:flex}
+    .modal-card{
+      width:min(500px,100%);background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);
     }
-
-    @media (max-width:1200px){
+    @media (max-width:1250px){
       .stats{grid-template-columns:repeat(2,1fr)}
       .main{grid-template-columns:1fr}
       .result-grid{grid-template-columns:repeat(2,1fr)}
@@ -296,7 +243,7 @@
         <div>
           <h1>Chemistry Experiment Yield Tool</h1>
           <p class="subtitle">
-            Online experiment storage with Google Sheets backend. Save experiments, calculate yield, and reuse reagents from a shared molar-mass library.
+            Advanced experiment tracker with online record storage, multi-filter search, saved search presets, reusable reagent library, and editable library records.
           </p>
         </div>
         <div class="toolbar">
@@ -323,9 +270,9 @@
         <div class="sub">Most recently updated</div>
       </div>
       <div class="card stat">
-        <div class="label">Current Limiting Reagent</div>
-        <div class="value" id="statLatestLimiter" style="font-size:1.05rem">—</div>
-        <div class="sub">From current form</div>
+        <div class="label">Filtered Results</div>
+        <div class="value" id="statFiltered">0</div>
+        <div class="sub">Matching records</div>
       </div>
       <div class="card stat">
         <div class="label">Saved Reagents</div>
@@ -345,9 +292,51 @@
 
         <div class="divider"></div>
 
-        <h3>Search Records</h3>
+        <h3>Advanced Record Search</h3>
         <div class="stack">
-          <input type="text" id="searchInput" placeholder="Search experiment, product, notes..." />
+          <div>
+            <label for="searchText">Text Search</label>
+            <input id="searchText" type="text" placeholder="Experiment, product, notes, reagent..." />
+          </div>
+          <div>
+            <label for="searchProduct">Product</label>
+            <input id="searchProduct" type="text" placeholder="e.g. Aspirin" />
+          </div>
+          <div>
+            <label for="searchReagent">Reagent Name</label>
+            <input id="searchReagent" type="text" placeholder="e.g. Acetic anhydride" />
+          </div>
+          <div>
+            <label for="searchDateFrom">Date From</label>
+            <input id="searchDateFrom" type="date" />
+          </div>
+          <div>
+            <label for="searchDateTo">Date To</label>
+            <input id="searchDateTo" type="date" />
+          </div>
+          <div>
+            <label for="searchYieldMin">Minimum % Yield</label>
+            <input id="searchYieldMin" type="number" step="any" min="0" />
+          </div>
+          <div>
+            <label for="searchYieldMax">Maximum % Yield</label>
+            <input id="searchYieldMax" type="number" step="any" min="0" />
+          </div>
+          <div>
+            <label for="searchLimiter">Limiting Reagent</label>
+            <input id="searchLimiter" type="text" placeholder="Reagent name" />
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-soft" id="clearSearchBtn">Clear Search</button>
+            <button class="btn btn-success" id="openSaveSearchBtn">Save Search</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Saved Searches</h3>
+        <div id="savedSearchList" class="saved-search-list">
+          <div class="empty">No saved searches yet.</div>
         </div>
 
         <div class="divider"></div>
@@ -377,7 +366,6 @@
         <div class="notice">
           Verify stoichiometry, coefficients, purity assumptions, and units before relying on calculated values.
         </div>
-
         <div class="status" id="statusBox">Ready.</div>
       </aside>
 
@@ -493,57 +481,95 @@
     </div>
   </div>
 
+  <div class="modal" id="saveSearchModal">
+    <div class="modal-card">
+      <h3>Save Search</h3>
+      <div class="stack">
+        <div>
+          <label for="savedSearchName">Search Name</label>
+          <input id="savedSearchName" type="text" placeholder="e.g. High yield aspirin runs" />
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-success" id="confirmSaveSearchBtn">Save</button>
+          <button class="btn btn-soft" id="cancelSaveSearchBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="editLibraryModal">
+    <div class="modal-card">
+      <h3>Edit Reagent Library Item</h3>
+      <input type="hidden" id="editLibraryId" />
+      <div class="stack">
+        <div>
+          <label for="editLibraryName">Reagent Name</label>
+          <input id="editLibraryName" type="text" />
+        </div>
+        <div>
+          <label for="editLibraryMolarMass">Molar Mass (g/mol)</label>
+          <input id="editLibraryMolarMass" type="number" step="any" min="0" />
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-success" id="confirmEditLibraryBtn">Save Changes</button>
+          <button class="btn btn-soft" id="cancelEditLibraryBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbyOCvy94-DiYSvnPO7axstX3JcEM35N2cGxnisYiM3ZB7B8TOwSw7SQXKtJk9gpEyx3cA/exec";
+    const SAVED_SEARCHES_KEY = "chemistry_saved_searches_v1";
 
-    const experimentId = document.getElementById("experimentId");
-    const experimentName = document.getElementById("experimentName");
-    const experimentDate = document.getElementById("experimentDate");
-    const productName = document.getElementById("productName");
-    const productMolarMass = document.getElementById("productMolarMass");
-    const actualYield = document.getElementById("actualYield");
-    const manualLimiter = document.getElementById("manualLimiter");
-    const notes = document.getElementById("notes");
-    const reagentTableBody = document.getElementById("reagentTableBody");
-    const searchInput = document.getElementById("searchInput");
-    const formTitle = document.getElementById("formTitle");
-    const statusBox = document.getElementById("statusBox");
+    const $ = (id) => document.getElementById(id);
 
-    const libraryName = document.getElementById("libraryName");
-    const libraryMolarMass = document.getElementById("libraryMolarMass");
-    const libraryList = document.getElementById("libraryList");
+    const experimentId = $("experimentId");
+    const experimentName = $("experimentName");
+    const experimentDate = $("experimentDate");
+    const productName = $("productName");
+    const productMolarMass = $("productMolarMass");
+    const actualYield = $("actualYield");
+    const manualLimiter = $("manualLimiter");
+    const notes = $("notes");
+    const reagentTableBody = $("reagentTableBody");
+    const formTitle = $("formTitle");
+    const statusBox = $("statusBox");
 
-    const limitingReagentResult = document.getElementById("limitingReagentResult");
-    const theoreticalMolesResult = document.getElementById("theoreticalMolesResult");
-    const theoreticalYieldResult = document.getElementById("theoreticalYieldResult");
-    const percentYieldResult = document.getElementById("percentYieldResult");
+    const libraryName = $("libraryName");
+    const libraryMolarMass = $("libraryMolarMass");
+    const libraryList = $("libraryList");
+
+    const limitingReagentResult = $("limitingReagentResult");
+    const theoreticalMolesResult = $("theoreticalMolesResult");
+    const theoreticalYieldResult = $("theoreticalYieldResult");
+    const percentYieldResult = $("percentYieldResult");
 
     let currentEditId = null;
     let reagentRows = [];
     let experiments = [];
     let reagentLibrary = [];
 
-    function setStatus(text) {
-      statusBox.textContent = text;
-    }
-
-    function uid() {
-      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-    }
-
+    function setStatus(text) { statusBox.textContent = text; }
+    function uid() { return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()); }
     function formatNum(val, digits = 4) {
       const n = Number(val);
       if (!isFinite(n)) return "0";
       return n.toFixed(digits).replace(/\.?0+$/, "");
     }
-
     function escapeHtml(text) {
       return String(text || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function getSavedSearches() {
+      try { return JSON.parse(localStorage.getItem(SAVED_SEARCHES_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveSavedSearches(items) {
+      localStorage.setItem(SAVED_SEARCHES_KEY, JSON.stringify(items));
+      renderSavedSearches();
     }
 
     async function apiGet(action) {
@@ -555,91 +581,56 @@
     async function apiPost(payload) {
       const formData = new URLSearchParams();
       formData.append("payload", JSON.stringify(payload));
-
-      const response = await fetch(API_URL, {
-        method: "POST",
-        body: formData
-      });
-
+      const response = await fetch(API_URL, { method: "POST", body: formData });
       if (!response.ok) throw new Error("POST failed: " + response.status);
       return response.json();
     }
 
     function getDefaultReagent() {
-      return {
-        id: uid(),
-        libraryId: "",
-        name: "",
-        coefficient: "1",
-        molarMass: "",
-        mass: "",
-        role: "reactant"
-      };
+      return { id: uid(), libraryId: "", name: "", coefficient: "1", molarMass: "", mass: "", role: "reactant" };
     }
 
     function calculateMoles(mass, molarMass) {
-      const m = Number(mass);
-      const mm = Number(molarMass);
+      const m = Number(mass), mm = Number(molarMass);
       if (!isFinite(m) || !isFinite(mm) || mm <= 0) return 0;
       return m / mm;
     }
 
     function getReactants() {
-      return reagentRows
-        .map(r => ({
-          ...r,
-          coefficientNum: Number(r.coefficient),
-          moles: calculateMoles(r.mass, r.molarMass)
-        }))
-        .filter(r => r.role === "reactant");
+      return reagentRows.map(r => ({
+        ...r,
+        coefficientNum: Number(r.coefficient),
+        moles: calculateMoles(r.mass, r.molarMass)
+      })).filter(r => r.role === "reactant");
     }
 
     function refreshManualLimiterOptions() {
       const previous = manualLimiter.value;
       const reactants = getReactants();
-
       manualLimiter.innerHTML = `<option value="">Auto-detect</option>` +
         reactants.map(r => `<option value="${escapeHtml(r.id)}">${escapeHtml(r.name || "Unnamed reagent")}</option>`).join("");
-
-      if (reactants.some(r => r.id === previous)) manualLimiter.value = previous;
-      else manualLimiter.value = "";
+      manualLimiter.value = reactants.some(r => r.id === previous) ? previous : "";
     }
 
     function getLibraryOptions(selectedId = "") {
       return `<option value="">Select saved reagent</option>` + reagentLibrary
-        .slice()
-        .sort((a, b) => String(a.name).localeCompare(String(b.name)))
-        .map(item => `
-          <option value="${escapeHtml(item.id)}" ${item.id === selectedId ? "selected" : ""}>
-            ${escapeHtml(item.name)} (${escapeHtml(formatNum(item.molarMass, 4))} g/mol)
-          </option>
-        `).join("");
+        .slice().sort((a,b) => String(a.name).localeCompare(String(b.name)))
+        .map(item => `<option value="${escapeHtml(item.id)}" ${item.id === selectedId ? "selected" : ""}>
+          ${escapeHtml(item.name)} (${escapeHtml(formatNum(item.molarMass, 4))} g/mol)
+        </option>`).join("");
     }
 
     function renderReagentTable() {
       if (!reagentRows.length) reagentRows = [getDefaultReagent()];
-
       reagentTableBody.innerHTML = reagentRows.map((row, index) => {
         const moles = calculateMoles(row.mass, row.molarMass);
         return `
           <tr>
-            <td>
-              <select class="cell-input" data-id="${row.id}" data-field="libraryId">
-                ${getLibraryOptions(row.libraryId)}
-              </select>
-            </td>
-            <td>
-              <input class="cell-input" type="text" value="${escapeHtml(row.name)}" data-id="${row.id}" data-field="name" placeholder="Reagent ${index + 1}" />
-            </td>
-            <td>
-              <input class="cell-input" type="number" step="any" min="0.0001" value="${escapeHtml(row.coefficient)}" data-id="${row.id}" data-field="coefficient" />
-            </td>
-            <td>
-              <input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.molarMass)}" data-id="${row.id}" data-field="molarMass" />
-            </td>
-            <td>
-              <input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.mass)}" data-id="${row.id}" data-field="mass" />
-            </td>
+            <td><select class="cell-input" data-id="${row.id}" data-field="libraryId">${getLibraryOptions(row.libraryId)}</select></td>
+            <td><input class="cell-input" type="text" value="${escapeHtml(row.name)}" data-id="${row.id}" data-field="name" placeholder="Reagent ${index + 1}" /></td>
+            <td><input class="cell-input" type="number" step="any" min="0.0001" value="${escapeHtml(row.coefficient)}" data-id="${row.id}" data-field="coefficient" /></td>
+            <td><input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.molarMass)}" data-id="${row.id}" data-field="molarMass" /></td>
+            <td><input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.mass)}" data-id="${row.id}" data-field="mass" /></td>
             <td><span data-moles="${row.id}">${formatNum(moles, 6)}</span></td>
             <td>
               <select class="cell-input" data-id="${row.id}" data-field="role">
@@ -666,10 +657,7 @@
 
       reagentTableBody.querySelectorAll("[data-delete]").forEach(btn => {
         btn.addEventListener("click", () => {
-          if (reagentRows.length <= 1) {
-            alert("At least one reagent row should remain.");
-            return;
-          }
+          if (reagentRows.length <= 1) return alert("At least one reagent row should remain.");
           reagentRows = reagentRows.filter(r => r.id !== btn.dataset.delete);
           renderReagentTable();
           refreshManualLimiterOptions();
@@ -708,18 +696,14 @@
         row.libraryId = match ? match.id : "";
       }
 
-      if (field === "name" || field === "role") {
-        refreshManualLimiterOptions();
-      }
-
+      if (field === "name" || field === "role") refreshManualLimiterOptions();
       recalculateAll(false);
     }
 
     function updateMoleCells() {
       reagentRows.forEach(row => {
-        const moles = calculateMoles(row.mass, row.molarMass);
         const el = document.querySelector(`[data-moles="${row.id}"]`);
-        if (el) el.textContent = formatNum(moles, 6);
+        if (el) el.textContent = formatNum(calculateMoles(row.mass, row.molarMass), 6);
       });
     }
 
@@ -727,51 +711,34 @@
       const reactants = getReactants();
       const productMM = Number(productMolarMass.value);
       const actual = Number(actualYield.value);
-
       let limiting = null;
-      const validReactants = reactants.filter(r =>
-        isFinite(r.coefficientNum) && r.coefficientNum > 0 && isFinite(r.moles)
-      );
 
+      const validReactants = reactants.filter(r => isFinite(r.coefficientNum) && r.coefficientNum > 0 && isFinite(r.moles));
       const manual = manualLimiter.value;
-      if (manual) {
-        limiting = validReactants.find(r => r.id === manual) || null;
-      } else if (validReactants.length) {
-        limiting = [...validReactants].sort((a, b) => (a.moles / a.coefficientNum) - (b.moles / b.coefficientNum))[0];
-      }
 
-      let theoreticalMoles = 0;
-      let theoreticalYield = 0;
-      let percentYield = 0;
+      if (manual) limiting = validReactants.find(r => r.id === manual) || null;
+      else if (validReactants.length) limiting = [...validReactants].sort((a,b) => (a.moles / a.coefficientNum) - (b.moles / b.coefficientNum))[0];
 
+      let theoreticalMoles = 0, theoreticalYield = 0, percentYield = 0;
       if (limiting) theoreticalMoles = limiting.moles / limiting.coefficientNum;
-      if (theoreticalMoles > 0 && isFinite(productMM) && productMM > 0) {
-        theoreticalYield = theoreticalMoles * productMM;
-      }
-      if (theoreticalYield > 0 && isFinite(actual) && actual >= 0) {
-        percentYield = (actual / theoreticalYield) * 100;
-      }
+      if (theoreticalMoles > 0 && isFinite(productMM) && productMM > 0) theoreticalYield = theoreticalMoles * productMM;
+      if (theoreticalYield > 0 && isFinite(actual) && actual >= 0) percentYield = (actual / theoreticalYield) * 100;
 
       return { limiting, theoreticalMoles, theoreticalYield, percentYield };
     }
 
     function recalculateAll(rebuildTable = false) {
       if (rebuildTable) renderReagentTable();
-
       const results = computeResults();
       limitingReagentResult.textContent = results.limiting ? (results.limiting.name || "Unnamed reagent") : "—";
       theoreticalMolesResult.textContent = formatNum(results.theoreticalMoles, 6);
       theoreticalYieldResult.textContent = formatNum(results.theoreticalYield, 4);
       percentYieldResult.textContent = formatNum(results.percentYield, 2) + "%";
-      document.getElementById("statLatestLimiter").textContent =
-        results.limiting ? (results.limiting.name || "Unnamed reagent") : "—";
-
       updateMoleCells();
     }
 
     function getCurrentExperimentData() {
       const results = computeResults();
-
       return {
         id: currentEditId || "",
         experimentCode: experimentId.value.trim(),
@@ -811,11 +778,7 @@
     async function loadAllData() {
       try {
         setStatus("Loading data...");
-        const [expRes, libRes] = await Promise.all([
-          apiGet("listExperiments"),
-          apiGet("listLibrary")
-        ]);
-
+        const [expRes, libRes] = await Promise.all([apiGet("listExperiments"), apiGet("listLibrary")]);
         if (!expRes.success) throw new Error(expRes.error || "Could not load experiments");
         if (!libRes.success) throw new Error(libRes.error || "Could not load library");
 
@@ -830,15 +793,13 @@
       } catch (err) {
         console.error(err);
         setStatus("Could not load data. Check your Apps Script URL and deployment settings.");
-        document.getElementById("entryList").innerHTML =
-          `<div class="empty" style="grid-column:1/-1">Could not load experiments.</div>`;
+        $("entryList").innerHTML = `<div class="empty" style="grid-column:1/-1">Could not load experiments.</div>`;
         libraryList.innerHTML = `<div class="empty">Could not load library.</div>`;
       }
     }
 
     async function saveExperiment() {
       const data = getCurrentExperimentData();
-
       if (!data.experimentName) return alert("Please enter an experiment name.");
       if (!data.experimentDate) return alert("Please enter a date.");
       if (!data.productName) return alert("Please enter a target product.");
@@ -847,7 +808,6 @@
         setStatus("Saving experiment...");
         const action = data.id ? "updateExperiment" : "createExperiment";
         const result = await apiPost({ action, experiment: data });
-
         if (!result.success) throw new Error(result.error || "Save failed");
 
         currentEditId = result.experiment.id;
@@ -858,14 +818,13 @@
       } catch (err) {
         console.error(err);
         setStatus("Could not save experiment.");
-        alert("Could not save experiment. Check backend configuration.");
+        alert("Could not save experiment.");
       }
     }
 
     function loadExperiment(id) {
       const record = experiments.find(r => String(r.id) === String(id));
       if (!record) return;
-
       currentEditId = record.id;
       formTitle.textContent = "Edit Experiment";
       experimentId.value = record.experimentCode || "";
@@ -878,7 +837,6 @@
       reagentRows = Array.isArray(record.reagents) && record.reagents.length
         ? record.reagents.map(r => ({ ...getDefaultReagent(), ...r, id: r.id || uid() }))
         : [getDefaultReagent()];
-
       renderReagentTable();
       refreshManualLimiterOptions();
       manualLimiter.value = record.manualLimiter || "";
@@ -895,12 +853,10 @@
 
     async function deleteExperiment(id) {
       if (!confirm("Delete this experiment?")) return;
-
       try {
         setStatus("Deleting experiment...");
         const result = await apiPost({ action: "deleteExperiment", id });
         if (!result.success) throw new Error(result.error || "Delete failed");
-
         if (currentEditId === id) resetForm();
         await loadAllData();
         setStatus("Experiment deleted.");
@@ -911,37 +867,64 @@
       }
     }
 
+    function getSearchFilters() {
+      return {
+        text: $("searchText").value.trim().toLowerCase(),
+        product: $("searchProduct").value.trim().toLowerCase(),
+        reagent: $("searchReagent").value.trim().toLowerCase(),
+        dateFrom: $("searchDateFrom").value,
+        dateTo: $("searchDateTo").value,
+        yieldMin: $("searchYieldMin").value,
+        yieldMax: $("searchYieldMax").value,
+        limiter: $("searchLimiter").value.trim().toLowerCase()
+      };
+    }
+
+    function applyFilters(records) {
+      const f = getSearchFilters();
+      return records.filter(r => {
+        const textHaystack = [
+          r.experimentCode, r.experimentName, r.experimentDate,
+          r.productName, r.notes, r.limitingReagentName,
+          ...(Array.isArray(r.reagents) ? r.reagents.map(x => x.name) : [])
+        ].join(" ").toLowerCase();
+
+        const reagentHaystack = (Array.isArray(r.reagents) ? r.reagents.map(x => x.name).join(" ") : "").toLowerCase();
+        const productVal = String(r.productName || "").toLowerCase();
+        const limiterVal = String(r.limitingReagentName || "").toLowerCase();
+        const dateVal = String(r.experimentDate || "");
+        const yieldVal = Number(r.percentYield);
+
+        if (f.text && !textHaystack.includes(f.text)) return false;
+        if (f.product && !productVal.includes(f.product)) return false;
+        if (f.reagent && !reagentHaystack.includes(f.reagent)) return false;
+        if (f.limiter && !limiterVal.includes(f.limiter)) return false;
+        if (f.dateFrom && dateVal < f.dateFrom) return false;
+        if (f.dateTo && dateVal > f.dateTo) return false;
+        if (f.yieldMin !== "" && (!isFinite(yieldVal) || yieldVal < Number(f.yieldMin))) return false;
+        if (f.yieldMax !== "" && (!isFinite(yieldVal) || yieldVal > Number(f.yieldMax))) return false;
+
+        return true;
+      });
+    }
+
     function renderSavedExperiments() {
-      const entryList = document.getElementById("entryList");
-      const q = searchInput.value.trim().toLowerCase();
+      const filtered = applyFilters(experiments)
+        .slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
 
-      const filtered = experiments
-        .slice()
-        .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
-        .filter(r => {
-          const reagentNames = Array.isArray(r.reagents) ? r.reagents.map(x => x.name) : [];
-          const haystack = [
-            r.experimentCode, r.experimentName, r.experimentDate,
-            r.productName, r.notes, r.limitingReagentName, ...reagentNames
-          ].join(" ").toLowerCase();
-          return haystack.includes(q);
-        });
+      $("recordCountChip").textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"}`;
+      $("statExperiments").textContent = experiments.length;
+      $("statFiltered").textContent = filtered.length;
 
-      document.getElementById("recordCountChip").textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"}`;
-      document.getElementById("statExperiments").textContent = experiments.length;
+      const yields = experiments.map(r => Number(r.percentYield)).filter(n => isFinite(n) && n > 0);
+      $("statAvgYield").textContent = yields.length ? formatNum(yields.reduce((a,b) => a+b, 0) / yields.length, 1) + "%" : "0%";
+      $("statLatest").textContent = experiments.length
+        ? (experiments.slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))[0].experimentName || "Untitled")
+        : "—";
 
-      const yields = experiments
-        .map(r => Number(r.percentYield))
-        .filter(n => isFinite(n) && n > 0);
-
-      document.getElementById("statAvgYield").textContent =
-        yields.length ? formatNum(yields.reduce((a,b) => a + b, 0) / yields.length, 1) + "%" : "0%";
-
-      document.getElementById("statLatest").textContent =
-        experiments.length ? (experiments.slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))[0].experimentName || "Untitled") : "—";
-
+      const entryList = $("entryList");
       if (!filtered.length) {
-        entryList.innerHTML = `<div class="empty" style="grid-column:1/-1">No experiments found.</div>`;
+        entryList.innerHTML = `<div class="empty" style="grid-column:1/-1">No experiments found for the current search.</div>`;
         return;
       }
 
@@ -951,17 +934,14 @@
             <div class="entry-title">${escapeHtml(r.experimentName || "Untitled Experiment")}</div>
             <div class="muted small">${escapeHtml(r.experimentDate || "No date")} ${r.experimentCode ? "· " + escapeHtml(r.experimentCode) : ""}</div>
           </div>
-
           <div class="chips">
             <span class="chip">${escapeHtml(r.productName || "No product")}</span>
             <span class="chip">Yield: ${formatNum(r.percentYield || 0, 2)}%</span>
           </div>
-
           <div class="snippet"><strong>Limiting reagent:</strong> ${escapeHtml(r.limitingReagentName || "—")}</div>
           <div class="snippet"><strong>Theoretical yield:</strong> ${formatNum(r.theoreticalYield || 0, 4)} g</div>
           <div class="snippet"><strong>Actual yield:</strong> ${escapeHtml(r.actualYield || "0")} g</div>
           ${r.notes ? `<div class="snippet"><strong>Notes:</strong> ${escapeHtml(String(r.notes).slice(0, 140))}${String(r.notes).length > 140 ? "..." : ""}</div>` : ""}
-
           <div class="entry-actions">
             <button class="btn btn-soft" onclick="window.editExperiment('${r.id}')">Edit</button>
             <button class="btn btn-danger" onclick="window.removeExperiment('${r.id}')">Delete</button>
@@ -973,35 +953,23 @@
     async function saveLibraryItem(name, molarMass, existingId = "") {
       const cleanName = String(name || "").trim();
       const mm = Number(molarMass);
-
-      if (!cleanName) {
-        alert("Please enter a reagent name.");
-        return false;
-      }
-      if (!isFinite(mm) || mm <= 0) {
-        alert("Please enter a valid molar mass.");
-        return false;
-      }
+      if (!cleanName) return alert("Please enter a reagent name."), false;
+      if (!isFinite(mm) || mm <= 0) return alert("Please enter a valid molar mass."), false;
 
       try {
-        setStatus("Saving reagent library item...");
+        setStatus(existingId ? "Updating reagent..." : "Saving reagent...");
         const result = await apiPost({
-          action: "saveLibraryItem",
-          item: {
-            id: existingId,
-            name: cleanName,
-            molarMass: mm
-          }
+          action: existingId ? "updateLibraryItem" : "saveLibraryItem",
+          item: { id: existingId, name: cleanName, molarMass: mm }
         });
-
-        if (!result.success) throw new Error(result.error || "Save library item failed");
+        if (!result.success) throw new Error(result.error || "Library save failed");
         await loadAllData();
         setStatus("Reagent library updated.");
         return true;
       } catch (err) {
         console.error(err);
-        setStatus("Could not save reagent library item.");
-        alert("Could not save reagent library item.");
+        setStatus("Could not update reagent library.");
+        alert("Could not update reagent library.");
         return false;
       }
     }
@@ -1009,14 +977,8 @@
     async function saveReagentRowToLibrary(rowId) {
       const row = reagentRows.find(r => r.id === rowId);
       if (!row) return;
-
       const ok = await saveLibraryItem(row.name, row.molarMass, row.libraryId || "");
       if (!ok) return;
-
-      const match = reagentLibrary.find(item => item.name.toLowerCase() === String(row.name).trim().toLowerCase());
-      if (match) row.libraryId = match.id;
-
-      renderReagentTable();
       alert("Reagent saved to library.");
     }
 
@@ -1029,28 +991,46 @@
     }
 
     async function deleteLibraryItem(id) {
-      if (!confirm("Delete this saved reagent from the library?")) return;
-
+      if (!confirm("Delete this reagent from the library?")) return;
       try {
-        setStatus("Deleting reagent library item...");
+        setStatus("Deleting reagent...");
         const result = await apiPost({ action: "deleteLibraryItem", id });
-        if (!result.success) throw new Error(result.error || "Delete library item failed");
-
-        reagentRows = reagentRows.map(row => row.libraryId === id ? { ...row, libraryId: "" } : row);
+        if (!result.success) throw new Error(result.error || "Delete failed");
         await loadAllData();
-        renderReagentTable();
-        setStatus("Reagent deleted from library.");
+        setStatus("Reagent deleted.");
       } catch (err) {
         console.error(err);
-        setStatus("Could not delete reagent library item.");
-        alert("Could not delete reagent library item.");
+        setStatus("Could not delete reagent.");
+        alert("Could not delete reagent.");
       }
+    }
+
+    function openEditLibrary(id) {
+      const item = reagentLibrary.find(x => String(x.id) === String(id));
+      if (!item) return;
+      $("editLibraryId").value = item.id;
+      $("editLibraryName").value = item.name || "";
+      $("editLibraryMolarMass").value = item.molarMass || "";
+      $("editLibraryModal").classList.add("open");
+    }
+
+    async function confirmEditLibrary() {
+      const id = $("editLibraryId").value;
+      const name = $("editLibraryName").value;
+      const molarMass = $("editLibraryMolarMass").value;
+      const ok = await saveLibraryItem(name, molarMass, id);
+      if (!ok) return;
+      closeEditLibraryModal();
+      alert("Reagent updated.");
+    }
+
+    function closeEditLibraryModal() {
+      $("editLibraryModal").classList.remove("open");
     }
 
     function useLibraryItem(id) {
       const item = reagentLibrary.find(x => x.id === id);
       if (!item) return;
-
       reagentRows.push({
         id: uid(),
         libraryId: item.id,
@@ -1060,7 +1040,6 @@
         mass: "",
         role: "reactant"
       });
-
       renderReagentTable();
       refreshManualLimiterOptions();
       recalculateAll(false);
@@ -1068,16 +1047,14 @@
     }
 
     function updateLibraryUI() {
-      document.getElementById("statReagentLibrary").textContent = reagentLibrary.length;
-
+      $("statReagentLibrary").textContent = reagentLibrary.length;
       if (!reagentLibrary.length) {
         libraryList.innerHTML = `<div class="empty">No saved reagents yet.</div>`;
         return;
       }
 
       libraryList.innerHTML = reagentLibrary
-        .slice()
-        .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+        .slice().sort((a,b) => String(a.name).localeCompare(String(b.name)))
         .map(item => `
           <div class="library-item">
             <div>
@@ -1086,42 +1063,127 @@
             </div>
             <div class="row-actions">
               <button class="btn btn-soft" onclick="window.useLibraryReagent('${item.id}')">Use</button>
+              <button class="btn btn-warn" onclick="window.editLibraryReagent('${item.id}')">Edit</button>
               <button class="btn btn-danger" onclick="window.deleteLibraryReagent('${item.id}')">Delete</button>
             </div>
           </div>
         `).join("");
     }
 
-    document.getElementById("newExperimentBtn").addEventListener("click", resetForm);
-    document.getElementById("refreshBtn").addEventListener("click", loadAllData);
+    function clearSearch() {
+      ["searchText","searchProduct","searchReagent","searchDateFrom","searchDateTo","searchYieldMin","searchYieldMax","searchLimiter"]
+        .forEach(id => $(id).value = "");
+      renderSavedExperiments();
+    }
 
-    document.getElementById("addReagentBtn").addEventListener("click", () => {
+    function openSaveSearchModal() {
+      $("savedSearchName").value = "";
+      $("saveSearchModal").classList.add("open");
+    }
+
+    function closeSaveSearchModal() {
+      $("saveSearchModal").classList.remove("open");
+    }
+
+    function confirmSaveSearch() {
+      const name = $("savedSearchName").value.trim();
+      if (!name) return alert("Please enter a search name.");
+      const searches = getSavedSearches();
+      searches.push({
+        id: uid(),
+        name,
+        filters: getSearchFilters(),
+        savedAt: new Date().toISOString()
+      });
+      saveSavedSearches(searches);
+      closeSaveSearchModal();
+    }
+
+    function renderSavedSearches() {
+      const searches = getSavedSearches();
+      const container = $("savedSearchList");
+      if (!searches.length) {
+        container.innerHTML = `<div class="empty">No saved searches yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = searches.map(s => `
+        <div class="saved-search-item">
+          <div>
+            <div><strong>${escapeHtml(s.name)}</strong></div>
+            <div class="muted small">${escapeHtml(new Date(s.savedAt).toLocaleString())}</div>
+          </div>
+          <div class="row-actions">
+            <button class="btn btn-soft" onclick="window.applySavedSearch('${s.id}')">Use</button>
+            <button class="btn btn-danger" onclick="window.deleteSavedSearch('${s.id}')">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function applySavedSearch(id) {
+      const search = getSavedSearches().find(s => s.id === id);
+      if (!search) return;
+      const f = search.filters || {};
+      $("searchText").value = f.text || "";
+      $("searchProduct").value = f.product || "";
+      $("searchReagent").value = f.reagent || "";
+      $("searchDateFrom").value = f.dateFrom || "";
+      $("searchDateTo").value = f.dateTo || "";
+      $("searchYieldMin").value = f.yieldMin || "";
+      $("searchYieldMax").value = f.yieldMax || "";
+      $("searchLimiter").value = f.limiter || "";
+      renderSavedExperiments();
+    }
+
+    function deleteSavedSearch(id) {
+      const searches = getSavedSearches().filter(s => s.id !== id);
+      saveSavedSearches(searches);
+    }
+
+    $("newExperimentBtn").addEventListener("click", resetForm);
+    $("refreshBtn").addEventListener("click", loadAllData);
+    $("addReagentBtn").addEventListener("click", () => {
       reagentRows.push(getDefaultReagent());
       renderReagentTable();
       refreshManualLimiterOptions();
       recalculateAll(false);
     });
+    $("recalculateBtn").addEventListener("click", () => recalculateAll(false));
+    $("recalcBottomBtn").addEventListener("click", () => recalculateAll(false));
+    $("clearFormBtn").addEventListener("click", resetForm);
+    $("saveExperimentBtn").addEventListener("click", saveExperiment);
+    $("duplicateBtn").addEventListener("click", duplicateCurrent);
+    $("saveLibraryBtn").addEventListener("click", saveSidebarLibraryEntry);
 
-    document.getElementById("recalculateBtn").addEventListener("click", () => recalculateAll(false));
-    document.getElementById("recalcBottomBtn").addEventListener("click", () => recalculateAll(false));
-    document.getElementById("clearFormBtn").addEventListener("click", resetForm);
-    document.getElementById("saveExperimentBtn").addEventListener("click", saveExperiment);
-    document.getElementById("duplicateBtn").addEventListener("click", duplicateCurrent);
-    document.getElementById("saveLibraryBtn").addEventListener("click", saveSidebarLibraryEntry);
+    ["searchText","searchProduct","searchReagent","searchDateFrom","searchDateTo","searchYieldMin","searchYieldMax","searchLimiter"]
+      .forEach(id => {
+        $(id).addEventListener("input", renderSavedExperiments);
+        $(id).addEventListener("change", renderSavedExperiments);
+      });
+
+    $("clearSearchBtn").addEventListener("click", clearSearch);
+    $("openSaveSearchBtn").addEventListener("click", openSaveSearchModal);
+    $("confirmSaveSearchBtn").addEventListener("click", confirmSaveSearch);
+    $("cancelSaveSearchBtn").addEventListener("click", closeSaveSearchModal);
+    $("confirmEditLibraryBtn").addEventListener("click", confirmEditLibrary);
+    $("cancelEditLibraryBtn").addEventListener("click", closeEditLibraryModal);
 
     [productMolarMass, actualYield, manualLimiter].forEach(el => {
       el.addEventListener("input", () => recalculateAll(false));
       el.addEventListener("change", () => recalculateAll(false));
     });
 
-    searchInput.addEventListener("input", renderSavedExperiments);
-
     window.editExperiment = loadExperiment;
     window.removeExperiment = deleteExperiment;
     window.useLibraryReagent = useLibraryItem;
     window.deleteLibraryReagent = deleteLibraryItem;
+    window.editLibraryReagent = openEditLibrary;
+    window.applySavedSearch = applySavedSearch;
+    window.deleteSavedSearch = deleteSavedSearch;
 
     resetForm();
+    renderSavedSearches();
     loadAllData();
   </script>
 </body>
