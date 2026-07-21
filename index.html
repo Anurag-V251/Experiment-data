@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemistry Experiment Yield Tool</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --bg-soft:#eef4ff;
+      --panel:#ffffff;
+      --text:#17212b;
+      --muted:#667085;
+      --line:#dbe4f0;
+      --primary:#4f46e5;
+      --primary2:#06b6d4;
+      --accent:#10b981;
+      --warn:#f59e0b;
+      --danger:#dc2626;
+      --chip:#eef2ff;
+      --chip-text:#3730a3;
+      --shadow:0 14px 40px rgba(20,30,50,.10);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:Inter,Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(79,70,229,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(6,182,212,.10), transparent 25%),
+        linear-gradient(180deg, var(--bg-soft), var(--bg));
+      min-height:100vh;
+    }
+
+    .wrap{max-width:1400px;margin:0 auto;padding:18px}
+    .hero{
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:#fff;
+      border-radius:28px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    h1{margin:0 0 8px;font-size:2rem;letter-spacing:-.03em}
+    .subtitle{margin:0;max-width:820px;opacity:.96}
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:.18s transform,.18s opacity;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:#fff;color:var(--primary)}
+    .btn-glass{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.22)}
+    .btn-soft{background:var(--chip);color:var(--chip-text)}
+    .btn-dark{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}
+    .btn-success{background:#dcfce7;color:#166534}
+    .btn-danger{background:#fee2e2;color:#991b1b}
+    .btn-warn{background:#fef3c7;color:#92400e}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+      margin:18px 0;
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .stat{padding:18px}
+    .label{font-size:.9rem;color:var(--muted);margin-bottom:8px}
+    .value{font-size:1.55rem;font-weight:800;letter-spacing:-.03em}
+    .sub{font-size:.88rem;color:var(--muted);margin-top:6px}
+
+    .main{
+      display:grid;
+      grid-template-columns:330px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .panel{padding:18px}
+    .panel h2,.panel h3{margin:0 0 14px}
+    .stack{display:grid;gap:10px}
+    .muted{color:var(--muted)}
+    .small{font-size:.92rem}
+
+    label{
+      display:block;
+      font-size:.93rem;
+      font-weight:700;
+      margin:0 0 7px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 13px;
+      font:inherit;
+      background:#fff;
+      color:var(--text);
+    }
+
+    textarea{min-height:100px;resize:vertical}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      background:var(--chip);
+      color:var(--chip-text);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:.82rem;
+      font-weight:700;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+    th,td{
+      border-bottom:1px solid var(--line);
+      padding:10px;
+      text-align:left;
+      vertical-align:top;
+      font-size:.92rem;
+    }
+    th{
+      background:#f8fbff;
+      font-weight:800;
+      color:#334155;
+    }
+    tr:last-child td{border-bottom:none}
+    .cell-input{
+      width:100%;
+      min-width:90px;
+      padding:9px 10px;
+      border-radius:10px;
+    }
+    .row-actions{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .result-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .result{
+      padding:16px;
+      border-radius:18px;
+      background:#fbfdff;
+      border:1px solid var(--line);
+    }
+    .result strong{
+      display:block;
+      font-size:.88rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .result span{
+      font-size:1.2rem;
+      font-weight:800;
+    }
+
+    .entries{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:14px;
+    }
+    .entry{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 8px 24px rgba(0,0,0,.05);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .entry-title{
+      font-weight:800;
+      font-size:1.02rem;
+    }
+    .snippet{
+      background:#fafcff;
+      border:1px solid #edf2f7;
+      border-radius:12px;
+      padding:10px;
+      font-size:.92rem;
+    }
+    .entry-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:auto;
+    }
+
+    .library-list{
+      display:grid;
+      gap:8px;
+      max-height:320px;
+      overflow:auto;
+    }
+    .library-item{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fbfdff;
+    }
+
+    .divider{height:1px;background:var(--line);margin:14px 0}
+    .empty{
+      text-align:center;
+      padding:38px 18px;
+      border:1px dashed var(--line);
+      border-radius:18px;
+      color:var(--muted);
+      background:#fafcff;
+    }
+
+    .notice{
+      background:#eff6ff;
+      color:#1e3a8a;
+      border:1px solid #bfdbfe;
+      border-radius:14px;
+      padding:13px 14px;
+      font-size:.94rem;
+    }
+
+    .status{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      padding:24px 6px 36px;
+      font-size:.92rem;
+    }
+
+    @media (max-width:1200px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .main{grid-template-columns:1fr}
+      .result-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:720px){
+      .stats,.result-grid,.grid-2,.grid-3{grid-template-columns:1fr}
+      .entries{grid-template-columns:1fr}
+      table{display:block;overflow-x:auto}
+      h1{font-size:1.65rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>Chemistry Experiment Yield Tool</h1>
+          <p class="subtitle">
+            Online experiment storage with Google Sheets backend. Save experiments, calculate yield, and reuse reagents from a shared molar-mass library.
+          </p>
+        </div>
+        <div class="toolbar">
+          <button class="btn btn-primary" id="newExperimentBtn">New Experiment</button>
+          <button class="btn btn-glass" id="refreshBtn">Refresh</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="card stat">
+        <div class="label">Saved Experiments</div>
+        <div class="value" id="statExperiments">0</div>
+        <div class="sub">Stored online</div>
+      </div>
+      <div class="card stat">
+        <div class="label">Average Percent Yield</div>
+        <div class="value" id="statAvgYield">0%</div>
+        <div class="sub">Across experiments</div>
+      </div>
+      <div class="card stat">
+        <div class="label">Latest Experiment</div>
+        <div class="value" id="statLatest" style="font-size:1.05rem">—</div>
+        <div class="sub">Most recently updated</div>
+      </div>
+      <div class="card stat">
+        <div class="label">Current Limiting Reagent</div>
+        <div class="value" id="statLatestLimiter" style="font-size:1.05rem">—</div>
+        <div class="sub">From current form</div>
+      </div>
+      <div class="card stat">
+        <div class="label">Saved Reagents</div>
+        <div class="value" id="statReagentLibrary">0</div>
+        <div class="sub">Library items online</div>
+      </div>
+    </section>
+
+    <section class="main">
+      <aside class="card panel">
+        <h3>Quick Controls</h3>
+        <div class="stack">
+          <button class="btn btn-dark" id="addReagentBtn">+ Add Reagent</button>
+          <button class="btn btn-soft" id="recalculateBtn">Recalculate</button>
+          <button class="btn btn-soft" id="clearFormBtn">Clear Form</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Search Records</h3>
+        <div class="stack">
+          <input type="text" id="searchInput" placeholder="Search experiment, product, notes..." />
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Add Reagent to Library</h3>
+        <div class="stack">
+          <div>
+            <label for="libraryName">Reagent Name</label>
+            <input type="text" id="libraryName" placeholder="e.g. Acetic anhydride" />
+          </div>
+          <div>
+            <label for="libraryMolarMass">Molar Mass (g/mol)</label>
+            <input type="number" step="any" min="0" id="libraryMolarMass" placeholder="e.g. 102.09" />
+          </div>
+          <button class="btn btn-success" id="saveLibraryBtn">Save to Library</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Saved Reagent Library</h3>
+        <div id="libraryList" class="library-list">
+          <div class="empty">Loading library...</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="notice">
+          Verify stoichiometry, coefficients, purity assumptions, and units before relying on calculated values.
+        </div>
+
+        <div class="status" id="statusBox">Ready.</div>
+      </aside>
+
+      <section class="stack">
+        <div class="card panel">
+          <h2 id="formTitle">New Experiment</h2>
+
+          <div class="grid-3">
+            <div>
+              <label for="experimentId">Experiment ID</label>
+              <input id="experimentId" type="text" placeholder="e.g. EXP-024" />
+            </div>
+            <div>
+              <label for="experimentName">Experiment Name</label>
+              <input id="experimentName" type="text" placeholder="e.g. Esterification Trial" />
+            </div>
+            <div>
+              <label for="experimentDate">Date</label>
+              <input id="experimentDate" type="date" />
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:14px">
+            <div>
+              <label for="productName">Target Product</label>
+              <input id="productName" type="text" placeholder="e.g. Aspirin" />
+            </div>
+            <div>
+              <label for="productMolarMass">Product Molar Mass (g/mol)</label>
+              <input id="productMolarMass" type="number" step="any" min="0" placeholder="e.g. 180.16" />
+            </div>
+          </div>
+
+          <div style="margin-top:18px">
+            <label>Reagents</label>
+            <table>
+              <thead>
+                <tr>
+                  <th style="min-width:160px">Saved Reagent</th>
+                  <th style="min-width:150px">Name</th>
+                  <th>Coefficient</th>
+                  <th>Molar Mass (g/mol)</th>
+                  <th>Mass Used (g)</th>
+                  <th>Moles</th>
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="reagentTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="result-grid">
+            <div class="result">
+              <strong>Limiting Reagent</strong>
+              <span id="limitingReagentResult">—</span>
+            </div>
+            <div class="result">
+              <strong>Theoretical Product Moles</strong>
+              <span id="theoreticalMolesResult">0</span>
+            </div>
+            <div class="result">
+              <strong>Theoretical Yield (g)</strong>
+              <span id="theoreticalYieldResult">0</span>
+            </div>
+            <div class="result">
+              <strong>Percent Yield</strong>
+              <span id="percentYieldResult">0%</span>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:16px">
+            <div>
+              <label for="actualYield">Actual Yield (g)</label>
+              <input id="actualYield" type="number" step="any" min="0" placeholder="e.g. 4.85" />
+            </div>
+            <div>
+              <label for="manualLimiter">Manual Limiting Reagent Override</label>
+              <select id="manualLimiter">
+                <option value="">Auto-detect</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:14px">
+            <label for="notes">Experiment Notes</label>
+            <textarea id="notes" placeholder="Procedure notes, observations, purity assumptions, temperature, catalyst, issues, etc."></textarea>
+          </div>
+
+          <div class="toolbar" style="margin-top:16px">
+            <button class="btn btn-dark" id="saveExperimentBtn">Save Experiment</button>
+            <button class="btn btn-success" id="duplicateBtn">Duplicate Current</button>
+            <button class="btn btn-warn" id="recalcBottomBtn">Recalculate</button>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <div class="toolbar">
+            <h2 style="margin:0">Saved Experiments</h2>
+            <div class="chips">
+              <span class="chip" id="recordCountChip">0 records</span>
+            </div>
+          </div>
+          <div id="entryList" class="entries">
+            <div class="empty" style="grid-column:1/-1">Loading experiments...</div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <div class="footer">
+      Chemistry Experiment Yield Tool — GitHub Pages + Google Sheets + Apps Script
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyOCvy94-DiYSvnPO7axstX3JcEM35N2cGxnisYiM3ZB7B8TOwSw7SQXKtJk9gpEyx3cA/exec";
+
+    const experimentId = document.getElementById("experimentId");
+    const experimentName = document.getElementById("experimentName");
+    const experimentDate = document.getElementById("experimentDate");
+    const productName = document.getElementById("productName");
+    const productMolarMass = document.getElementById("productMolarMass");
+    const actualYield = document.getElementById("actualYield");
+    const manualLimiter = document.getElementById("manualLimiter");
+    const notes = document.getElementById("notes");
+    const reagentTableBody = document.getElementById("reagentTableBody");
+    const searchInput = document.getElementById("searchInput");
+    const formTitle = document.getElementById("formTitle");
+    const statusBox = document.getElementById("statusBox");
+
+    const libraryName = document.getElementById("libraryName");
+    const libraryMolarMass = document.getElementById("libraryMolarMass");
+    const libraryList = document.getElementById("libraryList");
+
+    const limitingReagentResult = document.getElementById("limitingReagentResult");
+    const theoreticalMolesResult = document.getElementById("theoreticalMolesResult");
+    const theoreticalYieldResult = document.getElementById("theoreticalYieldResult");
+    const percentYieldResult = document.getElementById("percentYieldResult");
+
+    let currentEditId = null;
+    let reagentRows = [];
+    let experiments = [];
+    let reagentLibrary = [];
+
+    function setStatus(text) {
+      statusBox.textContent = text;
+    }
+
+    function uid() {
+      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
+    }
+
+    function formatNum(val, digits = 4) {
+      const n = Number(val);
+      if (!isFinite(n)) return "0";
+      return n.toFixed(digits).replace(/\.?0+$/, "");
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function apiGet(action) {
+      const response = await fetch(API_URL + "?action=" + encodeURIComponent(action));
+      if (!response.ok) throw new Error("GET failed: " + response.status);
+      return response.json();
+    }
+
+    async function apiPost(payload) {
+      const formData = new URLSearchParams();
+      formData.append("payload", JSON.stringify(payload));
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("POST failed: " + response.status);
+      return response.json();
+    }
+
+    function getDefaultReagent() {
+      return {
+        id: uid(),
+        libraryId: "",
+        name: "",
+        coefficient: "1",
+        molarMass: "",
+        mass: "",
+        role: "reactant"
+      };
+    }
+
+    function calculateMoles(mass, molarMass) {
+      const m = Number(mass);
+      const mm = Number(molarMass);
+      if (!isFinite(m) || !isFinite(mm) || mm <= 0) return 0;
+      return m / mm;
+    }
+
+    function getReactants() {
+      return reagentRows
+        .map(r => ({
+          ...r,
+          coefficientNum: Number(r.coefficient),
+          moles: calculateMoles(r.mass, r.molarMass)
+        }))
+        .filter(r => r.role === "reactant");
+    }
+
+    function refreshManualLimiterOptions() {
+      const previous = manualLimiter.value;
+      const reactants = getReactants();
+
+      manualLimiter.innerHTML = `<option value="">Auto-detect</option>` +
+        reactants.map(r => `<option value="${escapeHtml(r.id)}">${escapeHtml(r.name || "Unnamed reagent")}</option>`).join("");
+
+      if (reactants.some(r => r.id === previous)) manualLimiter.value = previous;
+      else manualLimiter.value = "";
+    }
+
+    function getLibraryOptions(selectedId = "") {
+      return `<option value="">Select saved reagent</option>` + reagentLibrary
+        .slice()
+        .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+        .map(item => `
+          <option value="${escapeHtml(item.id)}" ${item.id === selectedId ? "selected" : ""}>
+            ${escapeHtml(item.name)} (${escapeHtml(formatNum(item.molarMass, 4))} g/mol)
+          </option>
+        `).join("");
+    }
+
+    function renderReagentTable() {
+      if (!reagentRows.length) reagentRows = [getDefaultReagent()];
+
+      reagentTableBody.innerHTML = reagentRows.map((row, index) => {
+        const moles = calculateMoles(row.mass, row.molarMass);
+        return `
+          <tr>
+            <td>
+              <select class="cell-input" data-id="${row.id}" data-field="libraryId">
+                ${getLibraryOptions(row.libraryId)}
+              </select>
+            </td>
+            <td>
+              <input class="cell-input" type="text" value="${escapeHtml(row.name)}" data-id="${row.id}" data-field="name" placeholder="Reagent ${index + 1}" />
+            </td>
+            <td>
+              <input class="cell-input" type="number" step="any" min="0.0001" value="${escapeHtml(row.coefficient)}" data-id="${row.id}" data-field="coefficient" />
+            </td>
+            <td>
+              <input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.molarMass)}" data-id="${row.id}" data-field="molarMass" />
+            </td>
+            <td>
+              <input class="cell-input" type="number" step="any" min="0" value="${escapeHtml(row.mass)}" data-id="${row.id}" data-field="mass" />
+            </td>
+            <td><span data-moles="${row.id}">${formatNum(moles, 6)}</span></td>
+            <td>
+              <select class="cell-input" data-id="${row.id}" data-field="role">
+                <option value="reactant" ${row.role === "reactant" ? "selected" : ""}>Reactant</option>
+                <option value="solvent" ${row.role === "solvent" ? "selected" : ""}>Solvent</option>
+                <option value="catalyst" ${row.role === "catalyst" ? "selected" : ""}>Catalyst</option>
+                <option value="other" ${row.role === "other" ? "selected" : ""}>Other</option>
+              </select>
+            </td>
+            <td>
+              <div class="row-actions">
+                <button class="btn btn-success" type="button" data-save-reagent="${row.id}">Save</button>
+                <button class="btn btn-danger" type="button" data-delete="${row.id}">Remove</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      reagentTableBody.querySelectorAll("[data-field]").forEach(el => {
+        el.addEventListener("input", handleReagentInput);
+        el.addEventListener("change", handleReagentInput);
+      });
+
+      reagentTableBody.querySelectorAll("[data-delete]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (reagentRows.length <= 1) {
+            alert("At least one reagent row should remain.");
+            return;
+          }
+          reagentRows = reagentRows.filter(r => r.id !== btn.dataset.delete);
+          renderReagentTable();
+          refreshManualLimiterOptions();
+          recalculateAll(false);
+        });
+      });
+
+      reagentTableBody.querySelectorAll("[data-save-reagent]").forEach(btn => {
+        btn.addEventListener("click", () => saveReagentRowToLibrary(btn.dataset.saveReagent));
+      });
+    }
+
+    function handleReagentInput(e) {
+      const id = e.target.dataset.id;
+      const field = e.target.dataset.field;
+      const row = reagentRows.find(r => r.id === id);
+      if (!row) return;
+
+      if (field === "libraryId") {
+        row.libraryId = e.target.value;
+        const selected = reagentLibrary.find(item => item.id === row.libraryId);
+        if (selected) {
+          row.name = selected.name;
+          row.molarMass = String(selected.molarMass);
+        }
+        renderReagentTable();
+        refreshManualLimiterOptions();
+        recalculateAll(false);
+        return;
+      }
+
+      row[field] = e.target.value;
+
+      if (field === "name") {
+        const match = reagentLibrary.find(item => item.name.toLowerCase() === row.name.trim().toLowerCase());
+        row.libraryId = match ? match.id : "";
+      }
+
+      if (field === "name" || field === "role") {
+        refreshManualLimiterOptions();
+      }
+
+      recalculateAll(false);
+    }
+
+    function updateMoleCells() {
+      reagentRows.forEach(row => {
+        const moles = calculateMoles(row.mass, row.molarMass);
+        const el = document.querySelector(`[data-moles="${row.id}"]`);
+        if (el) el.textContent = formatNum(moles, 6);
+      });
+    }
+
+    function computeResults() {
+      const reactants = getReactants();
+      const productMM = Number(productMolarMass.value);
+      const actual = Number(actualYield.value);
+
+      let limiting = null;
+      const validReactants = reactants.filter(r =>
+        isFinite(r.coefficientNum) && r.coefficientNum > 0 && isFinite(r.moles)
+      );
+
+      const manual = manualLimiter.value;
+      if (manual) {
+        limiting = validReactants.find(r => r.id === manual) || null;
+      } else if (validReactants.length) {
+        limiting = [...validReactants].sort((a, b) => (a.moles / a.coefficientNum) - (b.moles / b.coefficientNum))[0];
+      }
+
+      let theoreticalMoles = 0;
+      let theoreticalYield = 0;
+      let percentYield = 0;
+
+      if (limiting) theoreticalMoles = limiting.moles / limiting.coefficientNum;
+      if (theoreticalMoles > 0 && isFinite(productMM) && productMM > 0) {
+        theoreticalYield = theoreticalMoles * productMM;
+      }
+      if (theoreticalYield > 0 && isFinite(actual) && actual >= 0) {
+        percentYield = (actual / theoreticalYield) * 100;
+      }
+
+      return { limiting, theoreticalMoles, theoreticalYield, percentYield };
+    }
+
+    function recalculateAll(rebuildTable = false) {
+      if (rebuildTable) renderReagentTable();
+
+      const results = computeResults();
+      limitingReagentResult.textContent = results.limiting ? (results.limiting.name || "Unnamed reagent") : "—";
+      theoreticalMolesResult.textContent = formatNum(results.theoreticalMoles, 6);
+      theoreticalYieldResult.textContent = formatNum(results.theoreticalYield, 4);
+      percentYieldResult.textContent = formatNum(results.percentYield, 2) + "%";
+      document.getElementById("statLatestLimiter").textContent =
+        results.limiting ? (results.limiting.name || "Unnamed reagent") : "—";
+
+      updateMoleCells();
+    }
+
+    function getCurrentExperimentData() {
+      const results = computeResults();
+
+      return {
+        id: currentEditId || "",
+        experimentCode: experimentId.value.trim(),
+        experimentName: experimentName.value.trim(),
+        experimentDate: experimentDate.value,
+        productName: productName.value.trim(),
+        productMolarMass: productMolarMass.value,
+        actualYield: actualYield.value,
+        manualLimiter: manualLimiter.value,
+        notes: notes.value.trim(),
+        reagents: reagentRows.map(r => ({ ...r })),
+        calculated: {
+          limitingReagentName: results.limiting ? (results.limiting.name || "") : "",
+          limitingReagentId: results.limiting ? results.limiting.id : "",
+          theoreticalMoles: results.theoreticalMoles,
+          theoreticalYield: results.theoreticalYield,
+          percentYield: results.percentYield
+        }
+      };
+    }
+
+    function resetForm() {
+      currentEditId = null;
+      formTitle.textContent = "New Experiment";
+      experimentId.value = "";
+      experimentName.value = "";
+      experimentDate.value = new Date().toISOString().split("T")[0];
+      productName.value = "";
+      productMolarMass.value = "";
+      actualYield.value = "";
+      notes.value = "";
+      reagentRows = [getDefaultReagent(), getDefaultReagent()];
+      refreshManualLimiterOptions();
+      recalculateAll(true);
+    }
+
+    async function loadAllData() {
+      try {
+        setStatus("Loading data...");
+        const [expRes, libRes] = await Promise.all([
+          apiGet("listExperiments"),
+          apiGet("listLibrary")
+        ]);
+
+        if (!expRes.success) throw new Error(expRes.error || "Could not load experiments");
+        if (!libRes.success) throw new Error(libRes.error || "Could not load library");
+
+        experiments = Array.isArray(expRes.experiments) ? expRes.experiments : [];
+        reagentLibrary = Array.isArray(libRes.reagentLibrary) ? libRes.reagentLibrary : [];
+
+        updateLibraryUI();
+        renderSavedExperiments();
+        renderReagentTable();
+        recalculateAll(false);
+        setStatus("Data loaded.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not load data. Check your Apps Script URL and deployment settings.");
+        document.getElementById("entryList").innerHTML =
+          `<div class="empty" style="grid-column:1/-1">Could not load experiments.</div>`;
+        libraryList.innerHTML = `<div class="empty">Could not load library.</div>`;
+      }
+    }
+
+    async function saveExperiment() {
+      const data = getCurrentExperimentData();
+
+      if (!data.experimentName) return alert("Please enter an experiment name.");
+      if (!data.experimentDate) return alert("Please enter a date.");
+      if (!data.productName) return alert("Please enter a target product.");
+
+      try {
+        setStatus("Saving experiment...");
+        const action = data.id ? "updateExperiment" : "createExperiment";
+        const result = await apiPost({ action, experiment: data });
+
+        if (!result.success) throw new Error(result.error || "Save failed");
+
+        currentEditId = result.experiment.id;
+        formTitle.textContent = "Edit Experiment";
+        await loadAllData();
+        setStatus("Experiment saved.");
+        alert("Experiment saved.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not save experiment.");
+        alert("Could not save experiment. Check backend configuration.");
+      }
+    }
+
+    function loadExperiment(id) {
+      const record = experiments.find(r => String(r.id) === String(id));
+      if (!record) return;
+
+      currentEditId = record.id;
+      formTitle.textContent = "Edit Experiment";
+      experimentId.value = record.experimentCode || "";
+      experimentName.value = record.experimentName || "";
+      experimentDate.value = record.experimentDate || "";
+      productName.value = record.productName || "";
+      productMolarMass.value = record.productMolarMass || "";
+      actualYield.value = record.actualYield || "";
+      notes.value = record.notes || "";
+      reagentRows = Array.isArray(record.reagents) && record.reagents.length
+        ? record.reagents.map(r => ({ ...getDefaultReagent(), ...r, id: r.id || uid() }))
+        : [getDefaultReagent()];
+
+      renderReagentTable();
+      refreshManualLimiterOptions();
+      manualLimiter.value = record.manualLimiter || "";
+      recalculateAll(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function duplicateCurrent() {
+      currentEditId = null;
+      if (experimentId.value) experimentId.value = experimentId.value + "-COPY";
+      formTitle.textContent = "Duplicate Experiment";
+      alert("Current experiment duplicated in the form. Save it to create a new record.");
+    }
+
+    async function deleteExperiment(id) {
+      if (!confirm("Delete this experiment?")) return;
+
+      try {
+        setStatus("Deleting experiment...");
+        const result = await apiPost({ action: "deleteExperiment", id });
+        if (!result.success) throw new Error(result.error || "Delete failed");
+
+        if (currentEditId === id) resetForm();
+        await loadAllData();
+        setStatus("Experiment deleted.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not delete experiment.");
+        alert("Could not delete experiment.");
+      }
+    }
+
+    function renderSavedExperiments() {
+      const entryList = document.getElementById("entryList");
+      const q = searchInput.value.trim().toLowerCase();
+
+      const filtered = experiments
+        .slice()
+        .sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))
+        .filter(r => {
+          const reagentNames = Array.isArray(r.reagents) ? r.reagents.map(x => x.name) : [];
+          const haystack = [
+            r.experimentCode, r.experimentName, r.experimentDate,
+            r.productName, r.notes, r.limitingReagentName, ...reagentNames
+          ].join(" ").toLowerCase();
+          return haystack.includes(q);
+        });
+
+      document.getElementById("recordCountChip").textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"}`;
+      document.getElementById("statExperiments").textContent = experiments.length;
+
+      const yields = experiments
+        .map(r => Number(r.percentYield))
+        .filter(n => isFinite(n) && n > 0);
+
+      document.getElementById("statAvgYield").textContent =
+        yields.length ? formatNum(yields.reduce((a,b) => a + b, 0) / yields.length, 1) + "%" : "0%";
+
+      document.getElementById("statLatest").textContent =
+        experiments.length ? (experiments.slice().sort((a,b) => String(b.updatedAt).localeCompare(String(a.updatedAt)))[0].experimentName || "Untitled") : "—";
+
+      if (!filtered.length) {
+        entryList.innerHTML = `<div class="empty" style="grid-column:1/-1">No experiments found.</div>`;
+        return;
+      }
+
+      entryList.innerHTML = filtered.map(r => `
+        <article class="entry">
+          <div>
+            <div class="entry-title">${escapeHtml(r.experimentName || "Untitled Experiment")}</div>
+            <div class="muted small">${escapeHtml(r.experimentDate || "No date")} ${r.experimentCode ? "· " + escapeHtml(r.experimentCode) : ""}</div>
+          </div>
+
+          <div class="chips">
+            <span class="chip">${escapeHtml(r.productName || "No product")}</span>
+            <span class="chip">Yield: ${formatNum(r.percentYield || 0, 2)}%</span>
+          </div>
+
+          <div class="snippet"><strong>Limiting reagent:</strong> ${escapeHtml(r.limitingReagentName || "—")}</div>
+          <div class="snippet"><strong>Theoretical yield:</strong> ${formatNum(r.theoreticalYield || 0, 4)} g</div>
+          <div class="snippet"><strong>Actual yield:</strong> ${escapeHtml(r.actualYield || "0")} g</div>
+          ${r.notes ? `<div class="snippet"><strong>Notes:</strong> ${escapeHtml(String(r.notes).slice(0, 140))}${String(r.notes).length > 140 ? "..." : ""}</div>` : ""}
+
+          <div class="entry-actions">
+            <button class="btn btn-soft" onclick="window.editExperiment('${r.id}')">Edit</button>
+            <button class="btn btn-danger" onclick="window.removeExperiment('${r.id}')">Delete</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function saveLibraryItem(name, molarMass, existingId = "") {
+      const cleanName = String(name || "").trim();
+      const mm = Number(molarMass);
+
+      if (!cleanName) {
+        alert("Please enter a reagent name.");
+        return false;
+      }
+      if (!isFinite(mm) || mm <= 0) {
+        alert("Please enter a valid molar mass.");
+        return false;
+      }
+
+      try {
+        setStatus("Saving reagent library item...");
+        const result = await apiPost({
+          action: "saveLibraryItem",
+          item: {
+            id: existingId,
+            name: cleanName,
+            molarMass: mm
+          }
+        });
+
+        if (!result.success) throw new Error(result.error || "Save library item failed");
+        await loadAllData();
+        setStatus("Reagent library updated.");
+        return true;
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not save reagent library item.");
+        alert("Could not save reagent library item.");
+        return false;
+      }
+    }
+
+    async function saveReagentRowToLibrary(rowId) {
+      const row = reagentRows.find(r => r.id === rowId);
+      if (!row) return;
+
+      const ok = await saveLibraryItem(row.name, row.molarMass, row.libraryId || "");
+      if (!ok) return;
+
+      const match = reagentLibrary.find(item => item.name.toLowerCase() === String(row.name).trim().toLowerCase());
+      if (match) row.libraryId = match.id;
+
+      renderReagentTable();
+      alert("Reagent saved to library.");
+    }
+
+    async function saveSidebarLibraryEntry() {
+      const ok = await saveLibraryItem(libraryName.value, libraryMolarMass.value, "");
+      if (!ok) return;
+      libraryName.value = "";
+      libraryMolarMass.value = "";
+      alert("Reagent saved to library.");
+    }
+
+    async function deleteLibraryItem(id) {
+      if (!confirm("Delete this saved reagent from the library?")) return;
+
+      try {
+        setStatus("Deleting reagent library item...");
+        const result = await apiPost({ action: "deleteLibraryItem", id });
+        if (!result.success) throw new Error(result.error || "Delete library item failed");
+
+        reagentRows = reagentRows.map(row => row.libraryId === id ? { ...row, libraryId: "" } : row);
+        await loadAllData();
+        renderReagentTable();
+        setStatus("Reagent deleted from library.");
+      } catch (err) {
+        console.error(err);
+        setStatus("Could not delete reagent library item.");
+        alert("Could not delete reagent library item.");
+      }
+    }
+
+    function useLibraryItem(id) {
+      const item = reagentLibrary.find(x => x.id === id);
+      if (!item) return;
+
+      reagentRows.push({
+        id: uid(),
+        libraryId: item.id,
+        name: item.name,
+        coefficient: "1",
+        molarMass: String(item.molarMass),
+        mass: "",
+        role: "reactant"
+      });
+
+      renderReagentTable();
+      refreshManualLimiterOptions();
+      recalculateAll(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateLibraryUI() {
+      document.getElementById("statReagentLibrary").textContent = reagentLibrary.length;
+
+      if (!reagentLibrary.length) {
+        libraryList.innerHTML = `<div class="empty">No saved reagents yet.</div>`;
+        return;
+      }
+
+      libraryList.innerHTML = reagentLibrary
+        .slice()
+        .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+        .map(item => `
+          <div class="library-item">
+            <div>
+              <div><strong>${escapeHtml(item.name)}</strong></div>
+              <div class="muted small">${formatNum(item.molarMass, 4)} g/mol</div>
+            </div>
+            <div class="row-actions">
+              <button class="btn btn-soft" onclick="window.useLibraryReagent('${item.id}')">Use</button>
+              <button class="btn btn-danger" onclick="window.deleteLibraryReagent('${item.id}')">Delete</button>
+            </div>
+          </div>
+        `).join("");
+    }
+
+    document.getElementById("newExperimentBtn").addEventListener("click", resetForm);
+    document.getElementById("refreshBtn").addEventListener("click", loadAllData);
+
+    document.getElementById("addReagentBtn").addEventListener("click", () => {
+      reagentRows.push(getDefaultReagent());
+      renderReagentTable();
+      refreshManualLimiterOptions();
+      recalculateAll(false);
+    });
+
+    document.getElementById("recalculateBtn").addEventListener("click", () => recalculateAll(false));
+    document.getElementById("recalcBottomBtn").addEventListener("click", () => recalculateAll(false));
+    document.getElementById("clearFormBtn").addEventListener("click", resetForm);
+    document.getElementById("saveExperimentBtn").addEventListener("click", saveExperiment);
+    document.getElementById("duplicateBtn").addEventListener("click", duplicateCurrent);
+    document.getElementById("saveLibraryBtn").addEventListener("click", saveSidebarLibraryEntry);
+
+    [productMolarMass, actualYield, manualLimiter].forEach(el => {
+      el.addEventListener("input", () => recalculateAll(false));
+      el.addEventListener("change", () => recalculateAll(false));
+    });
+
+    searchInput.addEventListener("input", renderSavedExperiments);
+
+    window.editExperiment = loadExperiment;
+    window.removeExperiment = deleteExperiment;
+    window.useLibraryReagent = useLibraryItem;
+    window.deleteLibraryReagent = deleteLibraryItem;
+
+    resetForm();
+    loadAllData();
+  </script>
+</body>
+</html>
